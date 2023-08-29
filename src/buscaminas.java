@@ -8,6 +8,8 @@ public class buscaminas extends JFrame {
 
     public buscaminas() {
         setLayout(new GridLayout(9, 9, 1, 1));
+        setBounds(0, 0, 9 * 40, 9 * 40);
+
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -33,9 +35,8 @@ public class buscaminas extends JFrame {
         for (int i = 0; i < tablero.length; i++) {
             for (int j = 0; j < tablero.length; j++) {
 
-                CustomJPanel casilla = new CustomJPanel(tablero[i][j] + "", "src/images/celda.png",
-                        tablero[i][j]);
-                add(casilla);
+                CustomJPanel celda = new CustomJPanel(tablero[i][j], "src/images/celda.png");
+                add(celda);
 
             }
             // JOptionPane.showMessageDialog(panel, "hola");

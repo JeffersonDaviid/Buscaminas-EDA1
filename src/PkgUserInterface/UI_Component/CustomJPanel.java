@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -17,16 +18,9 @@ public class CustomJPanel extends JPanel {
     private BufferedImage image;
     private boolean esBandera = false;
     private boolean estaRevelado = false;
-
-    public boolean isEstaRevelado() {
-        return estaRevelado;
-    }
-
-    public void setEstaRevelado(boolean estaRevelado) {
-        this.estaRevelado = estaRevelado;
-    }
-
-    private int valorCelda = 0;
+    private String pathCelda = "src/images/celda.png";
+    private String pathBandera = "src/images/bandera.png";
+    private String pathBomba = "src/images/bomba.png";
 
     /**
      * FUNCION PARA COLOCAR EL CASILLERO SIN SEVELAR
@@ -35,14 +29,12 @@ public class CustomJPanel extends JPanel {
      */
     public CustomJPanel(String imagePath) {
         try {
-            this.image = ImageIO.read(new File(imagePath));
+            // this.image = ImageIO.read(new File(imagePath));
+            setImage(ImageIO.read(new File(imagePath)));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
-
-    // private Color[] colors = { Color.RED, Color.GREEN, Color.BLUE };
-    // private int currentColorIndex = 0;
 
     /**
      * FUNCION PARA PONER EL CASILLERO
@@ -50,15 +42,16 @@ public class CustomJPanel extends JPanel {
      * @param etiqueta
      * @param imagePath
      */
-    public CustomJPanel(String etiqueta, String imagePath, int valorCelda) {
+    public CustomJPanel(int valorCelda, String imagePath) {
         try {
-            this.image = ImageIO.read(new File(imagePath));
+            // this.image = ImageIO.read(new File(imagePath));
+            setImage(ImageIO.read(new File(imagePath)));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
         setLayout(new BorderLayout(0, 0));
 
-        JLabel etiquetaCasillero = new JLabel(etiqueta);
+        JLabel etiquetaCasillero = new JLabel(valorCelda + "");
         etiquetaCasillero.setHorizontalAlignment(SwingConstants.CENTER);
         etiquetaCasillero.setVisible(false);
         add(etiquetaCasillero);
@@ -66,24 +59,25 @@ public class CustomJPanel extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+
                 if (SwingUtilities.isLeftMouseButton(e)) {
                     if (esBandera == false && estaRevelado == false) {
                         if (valorCelda == -1) {
-                            cambiarFondo("src/images/bomba.png");
+                            cambiarFondo(pathBomba);
+                            JOptionPane.showMessageDialog(etiquetaCasillero, "HAS PERDIDO!");
                         } else {
-                            cambiarFondo("src/images/celda.png");
+                            cambiarFondo(pathCelda);
                             etiquetaCasillero.setVisible(true);
                         }
                     }
                     setEstaRevelado(true);
 
                 } else if (SwingUtilities.isRightMouseButton(e)) {
-
                     if (esBandera == false && estaRevelado == false) {
-                        cambiarFondo("src/images/bandera.png");
+                        cambiarFondo(pathBandera);
                         setEsBandera(true);
                     } else if (esBandera == true && estaRevelado == false) {
-                        cambiarFondo("src/images/celda.png");
+                        cambiarFondo(pathCelda);
                         setEsBandera(false);
                     }
                 }
@@ -93,17 +87,11 @@ public class CustomJPanel extends JPanel {
 
     private void cambiarFondo(String pathImage) {
         try {
-            image = ImageIO.read(new File(pathImage));
+            // image = ImageIO.read(new File(pathImage));
+            setImage(ImageIO.read(new File(pathImage)));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        // currentColorIndex = (currentColorIndex + 1) % colors.length;
-        // setBackground(image);
-        repaint();
-    }
-
-    private void cambiarFondo(BufferedImage imagen) {
-        image = imagen;
         repaint();
     }
 
@@ -129,11 +117,11 @@ public class CustomJPanel extends JPanel {
         this.esBandera = esBandera;
     }
 
-    public int getValorCelda() {
-        return valorCelda;
+    public boolean isEstaRevelado() {
+        return estaRevelado;
     }
 
-    public void setValorCelda(int valorCelda) {
-        this.valorCelda = valorCelda;
+    public void setEstaRevelado(boolean estaRevelado) {
+        this.estaRevelado = estaRevelado;
     }
 }
