@@ -1,12 +1,8 @@
-package Proyecto;
 
 import java.awt.GridLayout;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-
-import Proyecto.PkgUserInterface.UI_Component.CustomJPanel;
+import PkgUserInterface.UI_Component.CustomJPanel;
 
 public class buscaminas extends JFrame {
 

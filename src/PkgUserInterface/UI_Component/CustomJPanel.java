@@ -1,13 +1,17 @@
-package Proyecto.PkgUserInterface.UI_Component;
+package PkgUserInterface.UI_Component;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 public class CustomJPanel extends JPanel {
     private BufferedImage image;
