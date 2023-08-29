@@ -15,8 +15,6 @@ import javax.swing.SwingUtilities;
 
 public class CustomJPanel extends JPanel {
     private BufferedImage image;
-    private BufferedImage imagenBandera;
-    private BufferedImage imagenBomba;
     private boolean esBandera = false;
     private boolean estaRevelado = false;
 
@@ -71,9 +69,9 @@ public class CustomJPanel extends JPanel {
                 if (SwingUtilities.isLeftMouseButton(e)) {
                     if (esBandera == false && estaRevelado == false) {
                         if (valorCelda == -1) {
-                            cambiarFondo("EDA1/src/Proyecto/images/bomba.png");
+                            cambiarFondo("src/images/bomba.png");
                         } else {
-                            cambiarFondo("EDA1/src/Proyecto/images/celda.png");
+                            cambiarFondo("src/images/celda.png");
                             etiquetaCasillero.setVisible(true);
                         }
                     }
@@ -82,10 +80,10 @@ public class CustomJPanel extends JPanel {
                 } else if (SwingUtilities.isRightMouseButton(e)) {
 
                     if (esBandera == false && estaRevelado == false) {
-                        cambiarFondo("EDA1/src/Proyecto/images/bandera.png");
+                        cambiarFondo("src/images/bandera.png");
                         setEsBandera(true);
                     } else if (esBandera == true && estaRevelado == false) {
-                        cambiarFondo("EDA1/src/Proyecto/images/celda.png");
+                        cambiarFondo("src/images/celda.png");
                         setEsBandera(false);
                     }
                 }
@@ -121,22 +119,6 @@ public class CustomJPanel extends JPanel {
 
     public void setImage(BufferedImage image) {
         this.image = image;
-    }
-
-    public BufferedImage getImagenBandera() {
-        return imagenBandera;
-    }
-
-    public void setImagenBandera(BufferedImage imagenBandera) {
-        this.imagenBandera = imagenBandera;
-    }
-
-    public BufferedImage getImagenBomba() {
-        return imagenBomba;
-    }
-
-    public void setImagenBomba(BufferedImage imagenBomba) {
-        this.imagenBomba = imagenBomba;
     }
 
     public boolean isEsBandera() {
