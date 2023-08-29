@@ -33,7 +33,7 @@ public class buscaminas extends JFrame {
         for (int i = 0; i < tablero.length; i++) {
             for (int j = 0; j < tablero.length; j++) {
 
-                CustomJPanel casilla = new CustomJPanel(tablero[i][j] + "", "EDA1/src/Proyecto/images/celda.png",
+                CustomJPanel casilla = new CustomJPanel(tablero[i][j] + "", "src/images/celda.png",
                         tablero[i][j]);
                 add(casilla);
 
