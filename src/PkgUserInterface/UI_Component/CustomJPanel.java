@@ -69,8 +69,8 @@ public class CustomJPanel extends JPanel {
                             cambiarFondo(pathCelda);
                             etiquetaCasillero.setVisible(true);
                         }
+                        setEstaRevelado(true);
                     }
-                    setEstaRevelado(true);
 
                 } else if (SwingUtilities.isRightMouseButton(e)) {
                     if (esBandera == false && estaRevelado == false) {

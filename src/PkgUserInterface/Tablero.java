@@ -1,23 +1,29 @@
 package PkgUserInterface;
 
 import java.awt.GridLayout;
+import java.util.Random;
 
 import javax.swing.JFrame;
 
 import PkgUserInterface.UI_Component.CustomJPanel;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
+
+import PkgLogic.NodoNiveles;
+
 import javax.swing.JLabel;
 
 public class Tablero extends JFrame {
 
     private boolean partidaFinalizada = false;
-    private static int[][] tablero = new int[9][9];
+    private boolean partidaIniciada = false;
+    private static int numeroBombas;
+    private static NodoNiveles niveles = null;
 
-    public Tablero(int filas, int columnas) {
+    public Tablero(int[][] tablero, int filas, int columnas) {
         setTitle("BUSCAMINAS");
-        // setBounds(0, 0, filas * 40, columnas * 42);
-        setBounds(0, 0, 752, 434);
+        setBounds(0, 0, filas * 30, columnas * 32);
+        // setBounds(0, 0, 752, 434);
         setVisible(true);
         setResizable(false);
         setLocationRelativeTo(null);
@@ -33,17 +39,8 @@ public class Tablero extends JFrame {
 
         JPanel panel_1 = new JPanel();
         getContentPane().add(panel_1, BorderLayout.CENTER);
-        // panel_1.setLayout(new GridLayout(filas, columnas, 1, 1));
-        panel_1.setLayout(new GridLayout(9, 9, 1, 1));
-
-        tablero[1][3] = -1;
-        tablero[2][1] = -1;
-        tablero[7][4] = -1;
-        tablero[4][7] = -1;
-        tablero[6][1] = -1;
-        tablero[8][6] = -1;
-
-        calcularValorCasilleroTablero(tablero, filas, columnas);
+        panel_1.setLayout(new GridLayout(filas, columnas, 1, 1));
+        // panel_1.setLayout(new GridLayout(9, 9, 1, 1));
 
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
@@ -51,21 +48,74 @@ public class Tablero extends JFrame {
                 panel_1.add(celda);
             }
         }
+
     }
 
     public static void main(String[] args) {
-        tablero[1][3] = -1;
-        tablero[2][1] = -1;
-        tablero[7][4] = -1;
-        tablero[4][7] = -1;
-        tablero[6][1] = -1;
-        tablero[8][6] = -1;
+        int dificultad = 10;
+        int filas = 0, columnas = 0;
 
-        Tablero game = new Tablero(9, 9);
+        // 10 facil con 10B , 18 medio con 40B, 24 con 99B dificil
+        if (dificultad <= 10) {
+            filas = columnas = 10;
+        } else if (10 < dificultad && dificultad <= 30) {
+            filas = columnas = 18;
+        } else if (dificultad >= 70) {
+            filas = columnas = 24;
+        }
+        generarNiveles(dificultad, filas, columnas);
+        NodoNiveles aux = niveles;
+
+        // while (aux != null) {
+        Tablero game = new Tablero(aux.getTablero(), filas, columnas);
         game.setVisible(true);
+        aux = aux.getNodoSiguiente();
+        // }
+
     }
 
+    public static void generarNiveles(int dificultad, int filas, int columnas) {
+
+        int[][] tablero = new int[filas][columnas];
+
+        // GENERAR LAS BOMBAS
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < dificultad + (i * 3); j++) {
+                tablero[generateRandomNumber(0, filas - 1)][generateRandomNumber(0, columnas - 1)] = -1;
+            }
+            // GENERAR LAS TABLAS
+            calcularValorCasilleroTablero(tablero, filas, columnas);
+
+            // INSERTAR LOS NIVELES EN UNA LISTA
+            NodoNiveles nivel = new NodoNiveles(tablero, null);
+            nivel.setNumeroBombas(numeroBombas);
+            niveles = niveles.insertarAlFinal(niveles, nivel);
+        }
+
+        // muestra las tablas
+        NodoNiveles aux = niveles;
+        while (aux != null) {
+            for (int i = 0; i < filas; i++) {
+                for (int j = 0; j < columnas; j++) {
+                    System.out.print(aux.getTablero()[i][j] + " | ");
+                }
+                System.out.println();
+            }
+            aux = aux.getNodoSiguiente();
+            System.out.println();
+            System.out.println();
+        }
+
+    }
+
+    public static int generateRandomNumber(int min, int max) {
+        Random random = new Random();
+        return random.nextInt(max - min + 1) + min;
+    }
+
+    // 10 facil con 10 , 18 medio con 40, 24 con 99 dificil
     public static void calcularValorCasilleroTablero(int[][] tablero, int filas, int columnas) {
+        numeroBombas = 0;
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
 
@@ -87,11 +137,13 @@ public class Tablero extends JFrame {
                     auxColumna = j - 1;
                     auxFila++;
                 }
-
                 // guardamos el contador en la posicion que no es una mina, para no quitar las
                 // minas
-                if (tablero[i][j] != -1)
+                if (tablero[i][j] != -1) {
                     tablero[i][j] = contador;
+                } else {
+                    numeroBombas++;
+                }
             }
         }
     }
