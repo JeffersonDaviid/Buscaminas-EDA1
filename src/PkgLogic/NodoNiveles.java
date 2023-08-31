@@ -1,17 +1,17 @@
 package PkgLogic;
 
-import javax.swing.JOptionPane;
+import PkgUserInterface.UI_Component.CustomJPanel;
 
 public class NodoNiveles {
 
     private int filas;
     private int columnas;
-    private int numeroBombas;
+    private int[] numeroBombas = { 0 };
 
-    private int[][] tablero;
+    private CustomJPanel[][] tablero;
     private NodoNiveles nodoSiguiente;
 
-    public NodoNiveles(int[][] tablero, NodoNiveles nodoSiguiente) {
+    public NodoNiveles(CustomJPanel[][] tablero, NodoNiveles nodoSiguiente) {
         this.tablero = tablero;
         this.nodoSiguiente = nodoSiguiente;
     }
@@ -34,11 +34,11 @@ public class NodoNiveles {
         return primerNodo;
     }
 
-    public int[][] getTablero() {
+    public CustomJPanel[][] getTablero() {
         return tablero;
     }
 
-    public void setTablero(int[][] tablero) {
+    public void setTablero(CustomJPanel[][] tablero) {
         this.tablero = tablero;
     }
 
@@ -66,11 +66,11 @@ public class NodoNiveles {
         this.columnas = columnas;
     }
 
-    public int getNumeroBombas() {
-        return numeroBombas;
+    public void setNumeroBombas(int[] numeroBombas) {
+        this.numeroBombas = numeroBombas;
     }
 
-    public void setNumeroBombas(int numeroBombas) {
-        this.numeroBombas = numeroBombas;
+    public int[] getNumeroBombas() {
+        return numeroBombas;
     }
 }

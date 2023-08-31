@@ -16,8 +16,12 @@ import javax.swing.SwingUtilities;
 
 public class CustomJPanel extends JPanel {
     private BufferedImage image;
+    private int numeroBanderasColocadas = 0;
+    private int valorCelda = 0;
     private boolean esBandera = false;
     private boolean estaRevelado = false;
+    private boolean finPartida = false;
+
     private String pathCelda = "src/images/celda.png";
     private String pathBandera = "src/images/bandera.png";
     private String pathBomba = "src/images/bomba.png";
@@ -42,7 +46,9 @@ public class CustomJPanel extends JPanel {
      * @param etiqueta
      * @param imagePath
      */
-    public CustomJPanel(int valorCelda, String imagePath) {
+    public CustomJPanel(int valor, String imagePath, int[] numeroBanderasRestantes) {
+        this.valorCelda = valor;
+        int auxNumeroBanderasRestantes = numeroBanderasRestantes[0];
         try {
             // this.image = ImageIO.read(new File(imagePath));
             setImage(ImageIO.read(new File(imagePath)));
@@ -51,7 +57,7 @@ public class CustomJPanel extends JPanel {
         }
         setLayout(new BorderLayout(0, 0));
 
-        JLabel etiquetaCasillero = new JLabel(valorCelda + "");
+        JLabel etiquetaCasillero = new JLabel(String.valueOf(valorCelda));
         etiquetaCasillero.setHorizontalAlignment(SwingConstants.CENTER);
         etiquetaCasillero.setVisible(false);
         add(etiquetaCasillero);
@@ -64,7 +70,7 @@ public class CustomJPanel extends JPanel {
                     if (esBandera == false && estaRevelado == false) {
                         if (valorCelda == -1) {
                             cambiarFondo(pathBomba);
-                            JOptionPane.showMessageDialog(etiquetaCasillero, "HAS PERDIDO!");
+                            setFinPartida(true);
                         } else {
                             cambiarFondo(pathCelda);
                             etiquetaCasillero.setVisible(true);
@@ -73,12 +79,16 @@ public class CustomJPanel extends JPanel {
                     }
 
                 } else if (SwingUtilities.isRightMouseButton(e)) {
-                    if (esBandera == false && estaRevelado == false) {
+                    if (esBandera == false && estaRevelado == false && numeroBanderasRestantes[0] > 0) {
                         cambiarFondo(pathBandera);
                         setEsBandera(true);
-                    } else if (esBandera == true && estaRevelado == false) {
+                        numeroBanderasRestantes[0]--;
+                    } else if (esBandera == true && estaRevelado == false
+                            && numeroBanderasRestantes[0] < auxNumeroBanderasRestantes) {
                         cambiarFondo(pathCelda);
                         setEsBandera(false);
+                        setNumeroBanderasColocadas(0);
+                        numeroBanderasRestantes[0]++;
                     }
                 }
             }
@@ -109,7 +119,7 @@ public class CustomJPanel extends JPanel {
         this.image = image;
     }
 
-    public boolean isEsBandera() {
+    public boolean getEsBandera() {
         return esBandera;
     }
 
@@ -117,11 +127,35 @@ public class CustomJPanel extends JPanel {
         this.esBandera = esBandera;
     }
 
-    public boolean isEstaRevelado() {
+    public boolean getEstaRevelado() {
         return estaRevelado;
     }
 
     public void setEstaRevelado(boolean estaRevelado) {
         this.estaRevelado = estaRevelado;
+    }
+
+    public int getNumeroBanderasColocadas() {
+        return numeroBanderasColocadas;
+    }
+
+    public void setNumeroBanderasColocadas(int numeroBanderasColocadas) {
+        this.numeroBanderasColocadas = numeroBanderasColocadas;
+    }
+
+    public int getValorCelda() {
+        return valorCelda;
+    }
+
+    public void setValorCelda(int valorCelda) {
+        this.valorCelda = valorCelda;
+    }
+
+    public boolean getFinPartida() {
+        return finPartida;
+    }
+
+    public void setFinPartida(boolean finPartida) {
+        this.finPartida = finPartida;
     }
 }

@@ -12,19 +12,19 @@ import javax.swing.JPanel;
 import PkgLogic.NodoNiveles;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 public class Tablero extends JFrame {
 
     private boolean partidaFinalizada = false;
     private boolean partidaIniciada = false;
-    private static int numeroBombas;
+    private static int numeroBanderas;
     private static NodoNiveles niveles = null;
 
-    public Tablero(int[][] tablero, int filas, int columnas) {
+    public Tablero(CustomJPanel[][] tablero, int filas, int columnas) {
         setTitle("BUSCAMINAS");
         setBounds(0, 0, filas * 30, columnas * 32);
         // setBounds(0, 0, 752, 434);
-        setVisible(true);
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -44,8 +44,7 @@ public class Tablero extends JFrame {
 
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
-                CustomJPanel celda = new CustomJPanel(tablero[i][j], "src/images/celda.png");
-                panel_1.add(celda);
+                panel_1.add(tablero[i][j]);
             }
         }
 
@@ -66,29 +65,53 @@ public class Tablero extends JFrame {
         generarNiveles(dificultad, filas, columnas);
         NodoNiveles aux = niveles;
 
-        // while (aux != null) {
-        Tablero game = new Tablero(aux.getTablero(), filas, columnas);
-        game.setVisible(true);
-        aux = aux.getNodoSiguiente();
-        // }
+        while (aux != null) {
 
+            Tablero game = new Tablero(aux.getTablero(), filas, columnas);
+            game.setVisible(true);
+            while (game.isVisible()) {
+
+                for (int i = 0; i < filas; i++) {
+                    for (int j = 0; j < columnas; j++) {
+                        if (aux.getTablero()[i][j].getFinPartida()) {
+                            JOptionPane.showMessageDialog(game, "USTED HA PERDIDO :(", "PUNTUACION", 1);
+                            game.setVisible(false);
+                            return;
+                        }
+                    }
+                }
+            }
+
+            if (aux.getNumeroBombas()[0] == 0) {
+                int contador = 0;
+                if (contador == aux.getNumeroBombas()[0]) {
+                    JOptionPane.showMessageDialog(game, "USTED HA GANADO!", "PUNTUACION", 3);
+                    aux = aux.getNodoSiguiente();
+                    break;
+                }
+            }
+        }
     }
 
     public static void generarNiveles(int dificultad, int filas, int columnas) {
 
-        int[][] tablero = new int[filas][columnas];
-
         // GENERAR LAS BOMBAS
         for (int i = 0; i < 3; i++) {
+            CustomJPanel[][] tablero = new CustomJPanel[filas][columnas];
+            NodoNiveles nivel = new NodoNiveles(tablero, null);
+
+            for (int k1 = 0; k1 < filas; k1++) {
+                for (int k2 = 0; k2 < columnas; k2++) {
+                    tablero[k1][k2] = new CustomJPanel(0, "src/images/cel da.png", nivel.getNumeroBombas());
+                }
+            }
             for (int j = 0; j < dificultad + (i * 3); j++) {
-                tablero[generateRandomNumber(0, filas - 1)][generateRandomNumber(0, columnas - 1)] = -1;
+                tablero[generateRandomNumber(0, filas - 1)][generateRandomNumber(0, columnas - 1)].setValorCelda(-1);
             }
             // GENERAR LAS TABLAS
-            calcularValorCasilleroTablero(tablero, filas, columnas);
+            nivel.setNumeroBombas(calcularValorCasilleroTablero(nivel, filas, columnas));
 
             // INSERTAR LOS NIVELES EN UNA LISTA
-            NodoNiveles nivel = new NodoNiveles(tablero, null);
-            nivel.setNumeroBombas(numeroBombas);
             niveles = niveles.insertarAlFinal(niveles, nivel);
         }
 
@@ -97,7 +120,7 @@ public class Tablero extends JFrame {
         while (aux != null) {
             for (int i = 0; i < filas; i++) {
                 for (int j = 0; j < columnas; j++) {
-                    System.out.print(aux.getTablero()[i][j] + " | ");
+                    System.out.print(aux.getTablero()[i][j].getValorCelda() + " | ");
                 }
                 System.out.println();
             }
@@ -114,8 +137,7 @@ public class Tablero extends JFrame {
     }
 
     // 10 facil con 10 , 18 medio con 40, 24 con 99 dificil
-    public static void calcularValorCasilleroTablero(int[][] tablero, int filas, int columnas) {
-        numeroBombas = 0;
+    public static int[] calcularValorCasilleroTablero(NodoNiveles nivel, int filas, int columnas) {
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
 
@@ -126,10 +148,9 @@ public class Tablero extends JFrame {
                     for (int k2 = 0; k2 < 3; k2++) {
 
                         // Tiene que estar dentro del limite del tablero
-                        if (auxFila >= 0 && auxColumna >= 0 && auxFila < tablero.length
-                                && auxColumna < tablero.length)
+                        if (auxFila >= 0 && auxColumna >= 0 && auxFila < filas && auxColumna < columnas)
                             // contamos las minas alrededor del casillero actual
-                            if (tablero[auxFila][auxColumna] == -1)
+                            if (nivel.getTablero()[auxFila][auxColumna].getValorCelda() == -1)
                                 contador++;
 
                         auxColumna++;
@@ -137,15 +158,22 @@ public class Tablero extends JFrame {
                     auxColumna = j - 1;
                     auxFila++;
                 }
+
+                System.out.print(nivel.getTablero()[i][j].getValorCelda() + " | ");
+
                 // guardamos el contador en la posicion que no es una mina, para no quitar las
                 // minas
-                if (tablero[i][j] != -1) {
-                    tablero[i][j] = contador;
-                } else {
-                    numeroBombas++;
+                if (nivel.getTablero()[i][j].getValorCelda() != -1) {
+                    CustomJPanel celda = new CustomJPanel(contador, "src/images/celda.png", nivel.getNumeroBombas());
+                    nivel.getTablero()[i][j] = celda;
+
+                } else if (nivel.getTablero()[i][j].getValorCelda() == -1) {
+                    nivel.getNumeroBombas()[0]++;
                 }
             }
+            System.out.println();
         }
+        return nivel.getNumeroBombas();
     }
 
 }
