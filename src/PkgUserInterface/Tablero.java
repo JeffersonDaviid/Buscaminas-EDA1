@@ -66,31 +66,47 @@ public class Tablero extends JFrame {
         NodoNiveles aux = niveles;
 
         while (aux != null) {
-
             Tablero game = new Tablero(aux.getTablero(), filas, columnas);
             game.setVisible(true);
-            while (game.isVisible()) {
 
+            while (game.isVisible()) {
+                // Verificar si se ha perdido
                 for (int i = 0; i < filas; i++) {
                     for (int j = 0; j < columnas; j++) {
                         if (aux.getTablero()[i][j].getFinPartida()) {
-                            JOptionPane.showMessageDialog(game, "USTED HA PERDIDO :(", "PUNTUACION", 1);
+                            JOptionPane.showMessageDialog(game, "USTED HA PERDIDO :(", "PUNTUACION",
+                                    JOptionPane.INFORMATION_MESSAGE);
                             game.setVisible(false);
                             return;
                         }
                     }
                 }
-            }
 
-            if (aux.getNumeroBombas()[0] == 0) {
-                int contador = 0;
-                if (contador == aux.getNumeroBombas()[0]) {
-                    JOptionPane.showMessageDialog(game, "USTED HA GANADO!", "PUNTUACION", 3);
-                    aux = aux.getNodoSiguiente();
-                    break;
+                // Verificar si se ha ganado
+                if (aux.getNumeroBombas()[0] == 0) {
+                    int contador = 0;
+
+                    for (int i = 0; i < filas; i++) {
+                        for (int j = 0; j < columnas; j++) {
+                            if (aux.getTablero()[i][j].getValorCelda() == -1) {
+                                contador++;
+                                if (aux.getTablero()[i][j].getEsBandera()) {
+                                    aux.getNumeroBombas()[0]++;
+                                }
+                            }
+                        }
+                    }
+
+                    if (contador == aux.getNumeroBombas()[0]) {
+                        JOptionPane.showMessageDialog(game, "USTED HA GANADO!", "PUNTUACION",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        aux = aux.getNodoSiguiente();
+                        break;
+                    }
                 }
             }
         }
+
     }
 
     public static void generarNiveles(int dificultad, int filas, int columnas) {
@@ -159,8 +175,6 @@ public class Tablero extends JFrame {
                     auxFila++;
                 }
 
-                System.out.print(nivel.getTablero()[i][j].getValorCelda() + " | ");
-
                 // guardamos el contador en la posicion que no es una mina, para no quitar las
                 // minas
                 if (nivel.getTablero()[i][j].getValorCelda() != -1) {
@@ -171,7 +185,6 @@ public class Tablero extends JFrame {
                     nivel.getNumeroBombas()[0]++;
                 }
             }
-            System.out.println();
         }
         return nivel.getNumeroBombas();
     }

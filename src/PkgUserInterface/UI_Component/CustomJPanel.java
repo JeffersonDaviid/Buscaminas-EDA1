@@ -83,8 +83,7 @@ public class CustomJPanel extends JPanel {
                         cambiarFondo(pathBandera);
                         setEsBandera(true);
                         numeroBanderasRestantes[0]--;
-                    } else if (esBandera == true && estaRevelado == false
-                            && numeroBanderasRestantes[0] < auxNumeroBanderasRestantes) {
+                    } else if (esBandera == true && estaRevelado == false) {
                         cambiarFondo(pathCelda);
                         setEsBandera(false);
                         setNumeroBanderasColocadas(0);
