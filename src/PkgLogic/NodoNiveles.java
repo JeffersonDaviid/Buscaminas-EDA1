@@ -73,4 +73,5 @@ public class NodoNiveles {
     public int[] getNumeroBombas() {
         return numeroBombas;
     }
+
 }

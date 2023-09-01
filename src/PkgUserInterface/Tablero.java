@@ -50,6 +50,29 @@ public class Tablero extends JFrame {
 
     }
 
+    // public void descubrirCeldasCercanas(int fila, int columna) {
+    // if (niveles.getTablero()[fila][columna].getValorCelda() == -1) {
+    // return;
+    // }
+
+    // destaparCelda(fila, columna);
+
+    // if (tablero[fila][columna].getValorCelda() == 0) {
+    // for (int i = fila - 1; i <= fila + 1; i++) {
+    // for (int j = columna - 1; j <= columna + 1; j++) {
+    // if (i >= 0 && i < filas && j >= 0 && j < columnas &&
+    // !(tablero[i][j].getValorCelda() == -1)
+    // && !tablero[i][j].getEstaRevelado()) {
+    // descubrirCeldasCercanas(i, j);
+    // }
+    // }
+    // }
+    // } else {
+    // mostrarValorCelda(fila, columna);
+    // }
+
+    // }
+
     public static void main(String[] args) {
         int dificultad = 10;
         int filas = 0, columnas = 0;
