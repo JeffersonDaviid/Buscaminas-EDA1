@@ -1,8 +1,11 @@
 package PkgUserInterface;
 
 import java.awt.GridLayout;
+import java.awt.event.*;
 import java.util.Random;
+import javax.swing.Timer;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 import PkgUserInterface.UI_Component.CustomJPanel;
@@ -20,6 +23,11 @@ public class Tablero extends JFrame {
     private boolean partidaIniciada = false;
     private static int numeroBanderas;
     private static NodoNiveles niveles = null;
+    private static Timer contador;
+    private JLabel lblContador;
+    private int segundos;
+    private int minutos;
+    private int horas;
 
     public Tablero(CustomJPanel[][] tablero, int filas, int columnas) {
         setTitle("BUSCAMINAS");
@@ -34,8 +42,23 @@ public class Tablero extends JFrame {
         JPanel panel = new JPanel();
         getContentPane().add(panel, BorderLayout.NORTH);
         // ---------->>>>>>>>>AQUI AGREGAR CONTADOR
-        JLabel lblContador = new JLabel("CONTADOR");
+        
+        
+        ImageIcon clockIcon = new ImageIcon("src/images/reloj.png");
+        JLabel clockLabel = new JLabel(clockIcon);
+        panel.add(clockLabel);
+
+         lblContador = new JLabel("00:00:00");
         panel.add(lblContador);
+
+
+        ImageIcon flagIcon = new ImageIcon("src/images/bandera1.png");
+        JLabel flagLabel = new JLabel(flagIcon);
+        panel.add(flagLabel);
+
+        // Contador de banderas
+        JLabel lblBanderas = new JLabel("00");
+        panel.add(lblBanderas);
 
         JPanel panel_1 = new JPanel();
         getContentPane().add(panel_1, BorderLayout.CENTER);
@@ -47,9 +70,46 @@ public class Tablero extends JFrame {
                 panel_1.add(tablero[i][j]);
             }
         }
+        segundos = 0;
+        minutos = 0;
+        horas = 0;
+        panel_1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (!partidaIniciada) {
+                    comenzarContador();
+                    partidaIniciada = true;
+                }
+            }
+        });
+        
 
     }
 
+
+    private void comenzarContador() {
+        contador = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                segundos++;
+                if (segundos == 60) {
+                    segundos = 0;
+                    minutos++;
+                    if (minutos == 60) {
+                        minutos = 0;
+                        horas++;
+                    }
+                }
+                updateTimerLabel();
+            }
+        });
+        contador.start();
+    }
+
+    private void updateTimerLabel() {
+        String tiempoFormateado = String.format("%02d:%02d:%02d", horas, minutos, segundos);
+        lblContador.setText(tiempoFormateado);
+    }
     // public void descubrirCeldasCercanas(int fila, int columna) {
     // if (niveles.getTablero()[fila][columna].getValorCelda() == -1) {
     // return;
@@ -72,6 +132,7 @@ public class Tablero extends JFrame {
     // }
 
     // }
+    
 
     public static void main(String[] args) {
         int dificultad = 10;
@@ -141,7 +202,7 @@ public class Tablero extends JFrame {
 
             for (int k1 = 0; k1 < filas; k1++) {
                 for (int k2 = 0; k2 < columnas; k2++) {
-                    tablero[k1][k2] = new CustomJPanel(0, "src/images/cel da.png", nivel.getNumeroBombas());
+                    tablero[k1][k2] = new CustomJPanel(0, "src/images/celda.png", nivel.getNumeroBombas());
                 }
             }
             for (int j = 0; j < dificultad + (i * 3); j++) {
