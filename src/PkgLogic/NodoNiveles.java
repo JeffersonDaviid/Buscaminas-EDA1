@@ -39,7 +39,7 @@ public class NodoNiveles {
         return numeroBanderas;
     }
 
-    public void setNumeroBandera(int[] numeroBandera) {
+    public void setNumeroBanderas(int[] numeroBandera) {
         this.numeroBanderas = numeroBandera;
     }
 

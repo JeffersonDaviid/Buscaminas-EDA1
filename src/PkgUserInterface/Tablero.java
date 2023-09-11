@@ -20,7 +20,7 @@ import javax.swing.JOptionPane;
 
 public class Tablero extends JFrame {
 
-    private boolean partidaFinalizada = false;
+    // private boolean partidaFinalizada = false;
     private boolean partidaIniciada = false;
     private static NodoNiveles niveles = null;
     private static Timer contador;
@@ -106,28 +106,6 @@ public class Tablero extends JFrame {
         String tiempoFormateado = String.format("%02d:%02d:%02d", horas, minutos, segundos);
         lblContador.setText(tiempoFormateado);
     }
-    // public void descubrirCeldasCercanas(int fila, int columna) {
-    // if (niveles.getTablero()[fila][columna].getValorCelda() == -1) {
-    // return;
-    // }
-
-    // revelarVacioCelda(fila, columna);
-
-    // if (tablero[fila][columna].getValorCelda() == 0) {
-    // for (int i = fila - 1; i <= fila + 1; i++) {
-    // for (int j = columna - 1; j <= columna + 1; j++) {
-    // if (i >= 0 && i < filas && j >= 0 && j < columnas &&
-    // !(tablero[i][j].getValorCelda() == -1)
-    // && !tablero[i][j].getEstaRevelado()) {
-    // descubrirCeldasCercanas(i, j);
-    // }
-    // }
-    // }
-    // } else {
-    // mostrarValorCelda(fila, columna);
-    // }
-
-    // }
 
     public static void main(String[] args) {
         int dificultad = 10;
@@ -153,41 +131,23 @@ public class Tablero extends JFrame {
                 // Verificar si se ha perdido
                 for (int i = 0; i < filas; i++) {
                     for (int j = 0; j < columnas; j++) {
-                        if (aux.getTablero()[i][j].getFinPartida()) {
+                        if (aux.getTablero()[i][j].isFinPartida()) {
+                            if (aux.getTablero()[i][j].isPartidaGanada()) {
+                                JOptionPane.showMessageDialog(game, "USTED HA GANADO!", "PUNTUACION",
+                                        JOptionPane.INFORMATION_MESSAGE);
+                                aux = aux.getNodoSiguiente();
+                                game.setVisible(false);
+                                break;
+                            } else {
+                                JOptionPane.showMessageDialog(game, "USTED HA PERDIDO :(", "PUNTUACION",
+                                        JOptionPane.INFORMATION_MESSAGE);
+                                game.setVisible(false);
+                                return;
+                            }
 
-                            JOptionPane.showMessageDialog(game, "USTED HA PERDIDO :(", "PUNTUACION",
-                                    JOptionPane.INFORMATION_MESSAGE);
-                            game.setVisible(false);
-                            return;
                         }
                     }
                 }
-
-                // // Verificar si se ha ganado
-                // if (aux.getNumeroBombas()[0] == 0) {
-
-                // for (int i = 0; i < filas; i++) {
-                // for (int j = 0; j < columnas; j++) {
-
-                // // verificar todas las bombas
-                // if (aux.getTablero()[i][j].getValorCelda() == -1) {
-                // numeroBanderas[0]++;
-
-                // // verificar si esta puesta la bandera
-                // if (aux.getTablero()[i][j].getEsBandera()) {
-                // aux.getNumeroBanderas()[0]++;
-                // }
-                // }
-                // }
-                // }
-
-                // if (numeroBanderas[0] == aux.getNumeroBanderas()[0]) {
-                // JOptionPane.showMessageDialog(game, "USTED HA GANADO!", "PUNTUACION",
-                // JOptionPane.INFORMATION_MESSAGE);
-                // aux = aux.getNodoSiguiente();
-                // break;
-                // }
-                // }
             }
         }
 
@@ -219,27 +179,12 @@ public class Tablero extends JFrame {
                 tablero[generateRandomNumber(0, filas - 1)][generateRandomNumber(0, columnas - 1)].setValorCelda(-1);
             }
             // GENERAR LAS TABLAS
-            nivel.setNumeroBombas(calcularValorCasilleroTablero(nivel, filas, columnas));
-            nivel.setNumeroBandera(calcularValorCasilleroTablero(nivel, filas, columnas));
+
+            calcularValorCasilleroTablero(nivel, filas, columnas);
 
             // INSERTAR LOS NIVELES EN UNA LISTA
             niveles = niveles.insertarAlFinal(niveles, nivel);
         }
-
-        // // muestra las tablas
-        // NodoNiveles aux = niveles;
-        // while (aux != null) {
-        // for (int i = 0; i < filas; i++) {
-        // for (int j = 0; j < columnas; j++) {
-        // System.out.print(aux.getTablero()[i][j].getValorCelda() + " | ");
-        // }
-        // System.out.println();
-        // }
-        // aux = aux.getNodoSiguiente();
-        // System.out.println();
-        // System.out.println();
-        // }
-
     }
 
     public static int generateRandomNumber(int min, int max) {
@@ -247,7 +192,14 @@ public class Tablero extends JFrame {
         return random.nextInt(max - min + 1) + min;
     }
 
-    public static int[] calcularValorCasilleroTablero(NodoNiveles nivel, int filas, int columnas) {
+    /**
+     * Funcion para calcular el numero de bombas cercanas a cada casillero
+     * 
+     * @param nivel
+     * @param filas
+     * @param columnas
+     */
+    public static void calcularValorCasilleroTablero(NodoNiveles nivel, int filas, int columnas) {
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
 
@@ -291,26 +243,16 @@ public class Tablero extends JFrame {
                                     revelarVacio(nivel.getTablero(), fila, columna);
                             }
 
-                            // for (int i = 0; i < 10; i++) {
-                            // for (int j = 0; j < 10; j++) {
-                            // if (nivel.getTablero()[i][j].getValorCelda() == 0
-                            // && nivel.getTablero()[i][j].getEstaRevelado())
-                            // System.out.print("X ");
-                            // else
-                            // System.out.print(nivel.getTablero()[i][j].getValorCelda() + " ");
-                            // }
-                            // System.out.println();
-                            // }
-
                         }
                     });
 
+                    // vamos a contar el total de bombas en toda la tabla
                 } else if (nivel.getTablero()[i][j].getValorCelda() == -1) {
                     nivel.getNumeroBombas()[0]++;
+                    nivel.getNumeroBanderas()[0]++;
                 }
             }
         }
-        return nivel.getNumeroBombas();
     }
 
     /**

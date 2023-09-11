@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -61,8 +60,8 @@ public class CustomJPanel extends JPanel {
      * @param etiqueta
      * @param imagePath
      */
-    public CustomJPanel(int fila, int columna, int valor, String imagePath, int[] numeroBanderasRestantes,
-            int[] numeroBombasRestantes) {
+    public CustomJPanel(int fila, int columna, int valor, String imagePath, int[] numBanderasRestantes,
+            int[] numBombasRestantes) {
         this.fila = fila;
         this.columna = columna;
         this.valorCelda = valor;
@@ -100,33 +99,37 @@ public class CustomJPanel extends JPanel {
                     }
 
                 } else if (SwingUtilities.isRightMouseButton(e)) {
-                    if (esBandera == false && estaRevelado == false && numeroBanderasRestantes[0] > 0) {
+                    if (esBandera == false && estaRevelado == false && numBanderasRestantes[0] > 0) {
                         cambiarFondo(pathBandera);
                         setEsBandera(true);
-                        numeroBanderasRestantes[0]--;
+                        numBanderasRestantes[0]--;
 
                         if (valorCelda == -1) {
-                            numeroBombasRestantes[0]--;
+                            numBombasRestantes[0]--;
                         }
 
                     } else if (esBandera == true && estaRevelado == false) {
                         cambiarFondo(pathCelda);
                         setEsBandera(false);
-                        setNumeroBanderasColocadas(0);
-                        numeroBanderasRestantes[0]++;
+                        // setNumBanderasColocadas(0);<
+                        numBanderasRestantes[0]++;
 
                         if (valorCelda == -1) {
-                            numeroBombasRestantes[0]++;
+                            numBombasRestantes[0]++;
                         }
                     }
 
-                    if (numeroBanderasRestantes[0] == 0 && numeroBombasRestantes[0] == 0) {
+                    if (numBombasRestantes[0] == 0 && numBanderasRestantes[0] == 0) {
+                        setFinPartida(true);
                         setPartidaGanada(true);
                     }
 
                 }
 
-                System.out.println("numero de banderas restantes: " + numeroBanderasRestantes[0]);
+                System.out.println("numero de banderas restantes: " + numBanderasRestantes[0]);
+                System.out.println("numero de bombas restantes: " + numBombasRestantes[0]);
+                System.out.println();
+
             }
         });
     }
@@ -187,7 +190,7 @@ public class CustomJPanel extends JPanel {
         this.valorCelda = valorCelda;
     }
 
-    public boolean getFinPartida() {
+    public boolean isFinPartida() {
         return finPartida;
     }
 
