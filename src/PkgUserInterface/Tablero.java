@@ -264,20 +264,20 @@ public class Tablero extends JFrame {
      */
     private static void revelarVacio(CustomJPanel[][] tablero, int fila, int columna) {
         // Verificar límites del tablero
-        if (fila < 0 || fila >= tablero.length || columna < 0 || columna >= tablero.length
-                || tablero[fila][columna].getValorCelda() != 0) {
-
+        if (fila < 0 || fila >= tablero.length || columna < 0 || columna >= tablero.length) {
             return;
         }
 
         // Verificar si la casilla ya fue explorada
-        if (tablero[fila][columna].getEstaRevelado()) {
+        if (tablero[fila][columna].getEstaRevelado() || tablero[fila][columna].getValorCelda() != 0) {
+            tablero[fila][columna].cambiarFondo("src/images/celdaDescubierta.png");
+            if (tablero[fila][columna].getValorCelda() != 0)
+                tablero[fila][columna].getEtiquetaCasillero().setVisible(true);
             return;
         }
 
         // Marcar la casilla como explorada
         tablero[fila][columna].setEstaRevelado(true);
-        tablero[fila][columna].cambiarFondo("src/images/celdaDescubierta.png");
 
         revelarVacio(tablero, fila, columna + 1);
         revelarVacio(tablero, fila + 1, columna);

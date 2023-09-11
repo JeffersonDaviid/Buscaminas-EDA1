@@ -23,23 +23,15 @@ public class CustomJPanel extends JPanel {
     private boolean esBandera = false;
     private boolean estaRevelado = false;
 
-    public int getFila() {
-        return fila;
-    }
-
-    public int getColumna() {
-        return columna;
-    }
-
     private boolean finPartida = false;
     private boolean partidaGanada = false;
-
-    private int numeroBanderasColocadas = 0;
 
     private String pathCelda = "src/images/celda.png";
     private String pathCeldaDescubierta = "src/images/celdaDescubierta.png";
     private String pathBandera = "src/images/bandera.png";
     private String pathBomba = "src/images/bomba.png";
+
+    private JLabel etiquetaCasillero;
 
     /**
      * FUNCION PARA COLOCAR EL CASILLERO SIN SEVELAR
@@ -75,7 +67,7 @@ public class CustomJPanel extends JPanel {
         }
         setLayout(new BorderLayout(0, 0));
 
-        JLabel etiquetaCasillero = new JLabel(String.valueOf(valorCelda));
+        etiquetaCasillero = new JLabel(String.valueOf(valorCelda));
         etiquetaCasillero.setHorizontalAlignment(SwingConstants.CENTER);
         etiquetaCasillero.setVisible(false);
         add(etiquetaCasillero);
@@ -92,10 +84,11 @@ public class CustomJPanel extends JPanel {
                             setPartidaGanada(false);
                         } else {
 
+                            // solo se muestra etiqueta de casillero != 0
                             if (valorCelda != 0) {
                                 etiquetaCasillero.setVisible(true);
-                                cambiarFondo(pathCeldaDescubierta);
                             }
+                            cambiarFondo(pathCeldaDescubierta);
                         }
                     }
 
@@ -112,7 +105,6 @@ public class CustomJPanel extends JPanel {
                     } else if (esBandera == true && estaRevelado == false) {
                         cambiarFondo(pathCelda);
                         setEsBandera(false);
-                        // setNumBanderasColocadas(0);<
                         numBanderasRestantes[0]++;
 
                         if (valorCelda == -1) {
@@ -127,9 +119,10 @@ public class CustomJPanel extends JPanel {
 
                 }
 
-                System.out.println("numero de banderas restantes: " + numBanderasRestantes[0]);
-                System.out.println("numero de bombas restantes: " + numBombasRestantes[0]);
-                System.out.println();
+                // System.out.println("numero de banderas restantes: " +
+                // numBanderasRestantes[0]);
+                // System.out.println("numero de bombas restantes: " + numBombasRestantes[0]);
+                // System.out.println();
 
             }
         });
@@ -175,14 +168,6 @@ public class CustomJPanel extends JPanel {
         this.estaRevelado = estaRevelado;
     }
 
-    public int getNumeroBanderasColocadas() {
-        return numeroBanderasColocadas;
-    }
-
-    public void setNumeroBanderasColocadas(int numeroBanderasColocadas) {
-        this.numeroBanderasColocadas = numeroBanderasColocadas;
-    }
-
     public int getValorCelda() {
         return valorCelda;
     }
@@ -205,6 +190,22 @@ public class CustomJPanel extends JPanel {
 
     public void setPartidaGanada(boolean partidaGanada) {
         this.partidaGanada = partidaGanada;
+    }
+
+    public int getFila() {
+        return fila;
+    }
+
+    public int getColumna() {
+        return columna;
+    }
+
+    public JLabel getEtiquetaCasillero() {
+        return etiquetaCasillero;
+    }
+
+    public void setEtiquetaCasillero(JLabel etiquetaCasillero) {
+        this.etiquetaCasillero = etiquetaCasillero;
     }
 
 }
