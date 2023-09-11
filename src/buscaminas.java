@@ -100,4 +100,5 @@ public class buscaminas extends JFrame {
             }
         }
     }
+
 }

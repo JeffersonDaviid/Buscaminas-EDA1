@@ -15,9 +15,14 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 public class CustomJPanel extends JPanel {
+
+    // informacion de la celda
     private BufferedImage image;
     private int numeroBanderasColocadas = 0;
     private int valorCelda = 0;
+    private int fila;
+    private int columna;
+
     private boolean esBandera = false;
     private boolean estaRevelado = false;
     private boolean finPartida = false;
@@ -46,8 +51,11 @@ public class CustomJPanel extends JPanel {
      * @param etiqueta
      * @param imagePath
      */
-    public CustomJPanel(int valor, String imagePath, int[] numeroBanderasRestantes) {
+    public CustomJPanel(int fila, int columna, int valor, String imagePath, int[] numeroBanderasRestantes) {
+        this.fila = fila;
+        this.columna = columna;
         this.valorCelda = valor;
+
         int auxNumeroBanderasRestantes = numeroBanderasRestantes[0];
         try {
             // this.image = ImageIO.read(new File(imagePath));

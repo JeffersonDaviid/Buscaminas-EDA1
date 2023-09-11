@@ -74,13 +74,13 @@ public class Tablero extends JFrame {
     // }
 
     public static void main(String[] args) {
-        int dificultad = 10;
+        int dificultad = 40;
         int filas = 0, columnas = 0;
 
         // 10 facil con 10B , 18 medio con 40B, 24 con 99B dificil
         if (dificultad <= 10) {
             filas = columnas = 10;
-        } else if (10 < dificultad && dificultad <= 30) {
+        } else if (10 < dificultad && dificultad < 70) {
             filas = columnas = 18;
         } else if (dificultad >= 70) {
             filas = columnas = 24;
@@ -141,7 +141,7 @@ public class Tablero extends JFrame {
 
             for (int k1 = 0; k1 < filas; k1++) {
                 for (int k2 = 0; k2 < columnas; k2++) {
-                    tablero[k1][k2] = new CustomJPanel(0, "src/images/cel da.png", nivel.getNumeroBombas());
+                    tablero[k1][k2] = new CustomJPanel(k1, k2, 0, "src/images/cel da.png", nivel.getNumeroBombas());
                 }
             }
             for (int j = 0; j < dificultad + (i * 3); j++) {
@@ -199,9 +199,10 @@ public class Tablero extends JFrame {
                 }
 
                 // guardamos el contador en la posicion que no es una mina, para no quitar las
-                // minas
+                // minasg
                 if (nivel.getTablero()[i][j].getValorCelda() != -1) {
-                    CustomJPanel celda = new CustomJPanel(contador, "src/images/celda.png", nivel.getNumeroBombas());
+                    CustomJPanel celda = new CustomJPanel(i, j, contador, "src/images/celda.png",
+                            nivel.getNumeroBombas());
                     nivel.getTablero()[i][j] = celda;
 
                 } else if (nivel.getTablero()[i][j].getValorCelda() == -1) {
@@ -211,5 +212,30 @@ public class Tablero extends JFrame {
         }
         return nivel.getNumeroBombas();
     }
+
+    // // Función recursiva para explorar las casillas sin bombas
+    // private static void explorar(CustomJPanel[][] tablero, int fila, int columna)
+    // {
+    // // Verificar límites del tablero
+    // if (fila < 0 || fila >= tablero.length || columna < 0 || columna >=
+    // tablero.length) {
+    // return;
+    // }
+
+    // // Verificar si la casilla ya fue explorada
+    // if (tablero[fila][columna] != '*') {
+    // return;
+    // }
+
+    // // Marcar la casilla como explorada
+    // tablero[fila][columna] = ' ';
+
+    // // Verificar casillas adyacentes
+    // for (int i = -1; i <= 1; i++) {
+    // for (int j = -1; j <= 1; j++) {
+    // explorar(fila + i, columna + j);
+    // }
+    // }
+    // }
 
 }
