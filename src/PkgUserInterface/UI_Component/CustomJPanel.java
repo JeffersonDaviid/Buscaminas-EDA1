@@ -37,6 +37,7 @@ public class CustomJPanel extends JPanel {
     private int numeroBanderasColocadas = 0;
 
     private String pathCelda = "src/images/celda.png";
+    private String pathCeldaDescubierta = "src/images/celdaDescubierta.png";
     private String pathBandera = "src/images/bandera.png";
     private String pathBomba = "src/images/bomba.png";
 
@@ -93,7 +94,7 @@ public class CustomJPanel extends JPanel {
 
                             if (valorCelda != 0) {
                                 etiquetaCasillero.setVisible(true);
-                                cambiarFondo(pathCelda);
+                                cambiarFondo(pathCeldaDescubierta);
                             }
                         }
                     }

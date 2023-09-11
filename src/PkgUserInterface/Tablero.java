@@ -169,7 +169,7 @@ public class Tablero extends JFrame {
 
             for (int k1 = 0; k1 < filas; k1++) {
                 for (int k2 = 0; k2 < columnas; k2++) {
-                    tablero[k1][k2] = new CustomJPanel(k1, k2, 0, "src/images/c elda.png", nivel.getNumeroBombas(),
+                    tablero[k1][k2] = new CustomJPanel(k1, k2, 0, "src/images/celda.png", nivel.getNumeroBombas(),
                             nivel.getNumeroBanderas());
 
                 }
@@ -277,7 +277,7 @@ public class Tablero extends JFrame {
 
         // Marcar la casilla como explorada
         tablero[fila][columna].setEstaRevelado(true);
-        tablero[fila][columna].cambiarFondo("src/images/bandera.png");
+        tablero[fila][columna].cambiarFondo("src/images/celdaDescubierta.png");
 
         revelarVacio(tablero, fila, columna + 1);
         revelarVacio(tablero, fila + 1, columna);
