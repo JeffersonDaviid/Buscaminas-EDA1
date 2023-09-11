@@ -18,14 +18,24 @@ public class CustomJPanel extends JPanel {
 
     // informacion de la celda
     private BufferedImage image;
-    private int numeroBanderasColocadas = 0;
     private int valorCelda = 0;
     private int fila;
     private int columna;
-
     private boolean esBandera = false;
     private boolean estaRevelado = false;
+
+    public int getFila() {
+        return fila;
+    }
+
+    public int getColumna() {
+        return columna;
+    }
+
     private boolean finPartida = false;
+    private boolean partidaGanada = false;
+
+    private int numeroBanderasColocadas = 0;
 
     private String pathCelda = "src/images/celda.png";
     private String pathBandera = "src/images/bandera.png";
@@ -51,12 +61,12 @@ public class CustomJPanel extends JPanel {
      * @param etiqueta
      * @param imagePath
      */
-    public CustomJPanel(int fila, int columna, int valor, String imagePath, int[] numeroBanderasRestantes) {
+    public CustomJPanel(int fila, int columna, int valor, String imagePath, int[] numeroBanderasRestantes,
+            int[] numeroBombasRestantes) {
         this.fila = fila;
         this.columna = columna;
         this.valorCelda = valor;
 
-        int auxNumeroBanderasRestantes = numeroBanderasRestantes[0];
         try {
             // this.image = ImageIO.read(new File(imagePath));
             setImage(ImageIO.read(new File(imagePath)));
@@ -79,11 +89,14 @@ public class CustomJPanel extends JPanel {
                         if (valorCelda == -1) {
                             cambiarFondo(pathBomba);
                             setFinPartida(true);
+                            setPartidaGanada(false);
                         } else {
-                            cambiarFondo(pathCelda);
-                            etiquetaCasillero.setVisible(true);
+
+                            if (valorCelda != 0) {
+                                etiquetaCasillero.setVisible(true);
+                                cambiarFondo(pathCelda);
+                            }
                         }
-                        setEstaRevelado(true);
                     }
 
                 } else if (SwingUtilities.isRightMouseButton(e)) {
@@ -91,18 +104,34 @@ public class CustomJPanel extends JPanel {
                         cambiarFondo(pathBandera);
                         setEsBandera(true);
                         numeroBanderasRestantes[0]--;
+
+                        if (valorCelda == -1) {
+                            numeroBombasRestantes[0]--;
+                        }
+
                     } else if (esBandera == true && estaRevelado == false) {
                         cambiarFondo(pathCelda);
                         setEsBandera(false);
                         setNumeroBanderasColocadas(0);
                         numeroBanderasRestantes[0]++;
+
+                        if (valorCelda == -1) {
+                            numeroBombasRestantes[0]++;
+                        }
                     }
+
+                    if (numeroBanderasRestantes[0] == 0 && numeroBombasRestantes[0] == 0) {
+                        setPartidaGanada(true);
+                    }
+
                 }
+
+                System.out.println("numero de banderas restantes: " + numeroBanderasRestantes[0]);
             }
         });
     }
 
-    private void cambiarFondo(String pathImage) {
+    public void cambiarFondo(String pathImage) {
         try {
             // image = ImageIO.read(new File(pathImage));
             setImage(ImageIO.read(new File(pathImage)));
@@ -165,4 +194,13 @@ public class CustomJPanel extends JPanel {
     public void setFinPartida(boolean finPartida) {
         this.finPartida = finPartida;
     }
+
+    public boolean isPartidaGanada() {
+        return partidaGanada;
+    }
+
+    public void setPartidaGanada(boolean partidaGanada) {
+        this.partidaGanada = partidaGanada;
+    }
+
 }

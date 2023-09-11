@@ -7,6 +7,7 @@ public class NodoNiveles {
     private int filas;
     private int columnas;
     private int[] numeroBombas = { 0 };
+    private int[] numeroBanderas = { 0 };
 
     private CustomJPanel[][] tablero;
     private NodoNiveles nodoSiguiente;
@@ -32,6 +33,14 @@ public class NodoNiveles {
         nodoUltimo.setNodoSiguiente(nodoParaInsertar);
         // nodoUltimo = nuevoNodo;
         return primerNodo;
+    }
+
+    public int[] getNumeroBanderas() {
+        return numeroBanderas;
+    }
+
+    public void setNumeroBandera(int[] numeroBandera) {
+        this.numeroBanderas = numeroBandera;
     }
 
     public CustomJPanel[][] getTablero() {
