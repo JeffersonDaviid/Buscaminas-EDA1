@@ -23,7 +23,7 @@ public class Tablero extends JFrame {
     // private boolean partidaFinalizada = false;
     private boolean partidaIniciada = false;
     private static NodoNiveles niveles = null;
-    private static Timer contador;
+    private static Timer timer;
     private JLabel lblContador;
     private int segundos;
     private int minutos;
@@ -63,28 +63,8 @@ public class Tablero extends JFrame {
         panel_1.setLayout(new GridLayout(filas, columnas, 1, 1));
         // panel_1.setLayout(new GridLayout(9, 9, 1, 1));
 
-        for (int i = 0; i < filas; i++) {
-            for (int j = 0; j < columnas; j++) {
-                panel_1.add(tablero[i][j]);
-            }
-        }
-        segundos = 0;
-        minutos = 0;
-        horas = 0;
-        panel_1.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (!partidaIniciada) {
-                    comenzarContador();
-                    partidaIniciada = true;
-                }
-            }
-        });
 
-    }
-
-    private void comenzarContador() {
-        contador = new Timer(1000, new ActionListener() {
+        timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 segundos++;
@@ -96,16 +76,42 @@ public class Tablero extends JFrame {
                         horas++;
                     }
                 }
-                updateTimerLabel();
+                actualizarContador();
             }
         });
-        contador.start();
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < columnas; j++) {
+                CustomJPanel celda = tablero[i][j];
+                celda.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        if (SwingUtilities.isLeftMouseButton(e)) {
+                            if (!partidaIniciada) {
+                                partidaIniciada = true;
+                                timer.start();
+                            }
+                            // Resto del código para manejar el clic izquierdo
+                        }
+                    }
+                });
+                panel_1.add(celda);
+            }
+        }
+
+
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < columnas; j++) {
+                panel_1.add(tablero[i][j]);
+            }
+        }
+        
     }
 
-    private void updateTimerLabel() {
-        String tiempoFormateado = String.format("%02d:%02d:%02d", horas, minutos, segundos);
-        lblContador.setText(tiempoFormateado);
+    private void actualizarContador() {
+        String tiempo = String.format("%02d:%02d:%02d", horas, minutos, segundos);
+        lblContador.setText(tiempo);
     }
+    
 
     public static void main(String[] args) {
         int dificultad = 10;
