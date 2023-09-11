@@ -13,6 +13,7 @@ import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import PkgLogic.NodoJugadores;
 import PkgLogic.NodoNiveles;
 
 import javax.swing.JLabel;
@@ -23,14 +24,26 @@ public class Tablero extends JFrame {
     // private boolean partidaFinalizada = false;
     private boolean partidaIniciada = false;
     private static NodoNiveles niveles = null;
+
+    // Items cabecera
     private static Timer contador;
     private JLabel lblContador;
+    private JLabel lblBanderas;
+
+    public JLabel getLblBanderas() {
+        return lblBanderas;
+    }
+
+    public void setLblBanderas(JLabel lblBanderas) {
+        this.lblBanderas = lblBanderas;
+    }
+
     private int segundos;
     private int minutos;
     private int horas;
 
-    public Tablero(CustomJPanel[][] tablero, int filas, int columnas) {
-        setTitle("BUSCAMINAS");
+    public Tablero(NodoNiveles nivel, int filas, int columnas, NodoJugadores player) {
+        setTitle("BUSCAMINAS - BIENVENIDO " + player.getNombre().toUpperCase());
         setBounds(0, 0, filas * 30, columnas * 32);
         // setBounds(0, 0, 752, 434);
         setResizable(false);
@@ -55,7 +68,7 @@ public class Tablero extends JFrame {
         panel.add(flagLabel);
 
         // Contador de banderas
-        JLabel lblBanderas = new JLabel("00");
+        lblBanderas = new JLabel(String.valueOf(nivel.getNumeroBanderas()[0]));
         panel.add(lblBanderas);
 
         JPanel panel_1 = new JPanel();
@@ -65,7 +78,7 @@ public class Tablero extends JFrame {
 
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
-                panel_1.add(tablero[i][j]);
+                panel_1.add(nivel.getTablero()[i][j]);
             }
         }
         segundos = 0;
@@ -78,6 +91,13 @@ public class Tablero extends JFrame {
                     comenzarContador();
                     partidaIniciada = true;
                 }
+            }
+        });
+
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                getLblBanderas().setText(String.valueOf(nivel.getNumeroBombas()[0]));
             }
         });
 
@@ -122,9 +142,10 @@ public class Tablero extends JFrame {
 
         generarNiveles(dificultad, filas, columnas);
         NodoNiveles aux = niveles;
+        NodoJugadores p = new NodoJugadores("Pepe", 0);
 
         while (aux != null) {
-            Tablero game = new Tablero(aux.getTablero(), filas, columnas);
+            Tablero game = new Tablero(aux, filas, columnas, p);
             game.setVisible(true);
 
             while (game.isVisible()) {
