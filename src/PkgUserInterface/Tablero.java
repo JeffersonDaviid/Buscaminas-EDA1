@@ -293,8 +293,10 @@ public class Tablero extends JFrame {
         // Verificar si la casilla ya fue explorada
         if (tablero[fila][columna].getEstaRevelado() || tablero[fila][columna].getValorCelda() != 0) {
             tablero[fila][columna].cambiarFondo("src/images/celdaDescubierta.png");
-            if (tablero[fila][columna].getValorCelda() != 0)
+            if (tablero[fila][columna].getValorCelda() != 0) {
+                tablero[fila][columna].setEstaRevelado(true);
                 tablero[fila][columna].getEtiquetaCasillero().setVisible(true);
+            }
             return;
         }
 
