@@ -13,7 +13,7 @@ import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import PkgLogic.NodoJugadores;
+import PkgLogic.PilaJugadores;
 import PkgLogic.NodoNiveles;
 
 import javax.swing.JLabel;
@@ -29,6 +29,7 @@ public class Tablero extends JFrame {
     private static Timer contador;
     private JLabel lblContador;
     private JLabel lblBanderas;
+    private PantallaInicio pantallaInicio;
 
     public JLabel getLblBanderas() {
         return lblBanderas;
@@ -42,13 +43,14 @@ public class Tablero extends JFrame {
     private int minutos;
     private int horas;
 
-    public Tablero(NodoNiveles nivel, int filas, int columnas, NodoJugadores player) {
+    public Tablero(NodoNiveles nivel, int filas, int columnas, PilaJugadores player, PantallaInicio pantalla) {
         setTitle("BUSCAMINAS - BIENVENIDO " + player.getNombre().toUpperCase());
         setBounds(0, 0, filas * 30, columnas * 32);
-        // setBounds(0, 0, 752, 434);
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+    
+        this.pantallaInicio = pantalla;
 
         getContentPane().setLayout(new BorderLayout(0, 0));
 
@@ -128,10 +130,23 @@ public class Tablero extends JFrame {
     }
 
     public static void main(String[] args) {
-        int dificultad = 10;
+        // Crear el JFrame
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    
+        // Crear la pantalla de inicio
+        PantallaInicio pantallaInicio = new PantallaInicio(frame);
+    
+        // Agregar la pantalla de inicio al JFrame
+        frame.getContentPane().add(pantallaInicio);
+    
+        frame.pack();
+        frame.setVisible(true);
+    
+        int dificultad = pantallaInicio.mostrarSelectorDificultad(frame); // Obtener dificultad seleccionada
+    
+        // Continuar con el código
         int filas = 0, columnas = 0;
-
-        // 10 facil con 10B , 18 medio con 40B, 24 con 99B dificil
         if (dificultad <= 10) {
             filas = columnas = 10;
         } else if (10 < dificultad && dificultad < 70) {
@@ -139,15 +154,16 @@ public class Tablero extends JFrame {
         } else if (dificultad >= 70) {
             filas = columnas = 24;
         }
-
+    
+        // ... Resto del código para continuar con el juego
         generarNiveles(dificultad, filas, columnas);
         NodoNiveles aux = niveles;
-        NodoJugadores p = new NodoJugadores("Pepe", 0);
-
+        PilaJugadores p = new PilaJugadores(100);
+    
         while (aux != null) {
-            Tablero game = new Tablero(aux, filas, columnas, p);
+            Tablero game = new Tablero(aux, filas, columnas, p, pantallaInicio);
             game.setVisible(true);
-
+    
             while (game.isVisible()) {
                 // Verificar si se ha perdido
                 for (int i = 0; i < filas; i++) {
@@ -165,14 +181,14 @@ public class Tablero extends JFrame {
                                 game.setVisible(false);
                                 return;
                             }
-
+    
                         }
                     }
                 }
             }
         }
-
     }
+    
 
     /**
      * Funcion para generar los 3 niveles dependiendo del grado de dificultad
