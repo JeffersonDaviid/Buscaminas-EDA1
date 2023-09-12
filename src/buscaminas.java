@@ -46,16 +46,7 @@ public class buscaminas extends JFrame {
     private static int[][] tablero = new int[9][9];
 
     public static void main(String[] args) {
-
-        // imprimirTablero(tablero);
-        // imprimirTablero(tablero);
-
-        buscaminas panel = new buscaminas();
-        panel.setVisible(true);
-
-        // JPanel panel = new JPanel();
-        // panel.setLayout(new GridLayout(9, 9, 1, 1));
-
+        
     }
 
     public static void imprimirTablero(int[][] tablero) {
