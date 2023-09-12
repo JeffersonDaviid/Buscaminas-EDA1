@@ -2,7 +2,6 @@
 import java.awt.GridLayout;
 
 import javax.swing.JFrame;
-import PkgUserInterface.UI_Component.CustomJPanel;
 
 public class buscaminas extends JFrame {
 
@@ -46,7 +45,7 @@ public class buscaminas extends JFrame {
     private static int[][] tablero = new int[9][9];
 
     public static void main(String[] args) {
-        
+
     }
 
     public static void imprimirTablero(int[][] tablero) {
