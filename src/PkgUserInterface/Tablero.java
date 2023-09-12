@@ -116,15 +116,16 @@ public class Tablero extends JFrame {
                         horas++;
                     }
                 }
-                updateTimerLabel();
+                actualizarContador();
             }
         });
         contador.start();
+
     }
 
-    private void updateTimerLabel() {
-        String tiempoFormateado = String.format("%02d:%02d:%02d", horas, minutos, segundos);
-        lblContador.setText(tiempoFormateado);
+    private void actualizarContador() {
+        String tiempo = String.format("%02d:%02d:%02d", horas, minutos, segundos);
+        lblContador.setText(tiempo);
     }
 
     public static void main(String[] args) {
