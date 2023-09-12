@@ -1,6 +1,7 @@
 package PkgUserInterface.UI_Component;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -70,6 +71,7 @@ public class CustomJPanel extends JPanel {
         etiquetaCasillero = new JLabel(String.valueOf(valorCelda));
         etiquetaCasillero.setHorizontalAlignment(SwingConstants.CENTER);
         etiquetaCasillero.setVisible(false);
+        etiquetaCasillero.setFont(new Font("Super Mario 256", Font.BOLD, 23));
         add(etiquetaCasillero);
 
         addMouseListener(new MouseAdapter() {
