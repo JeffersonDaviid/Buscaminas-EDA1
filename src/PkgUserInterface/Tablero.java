@@ -191,7 +191,7 @@ public class Tablero extends JFrame {
 
             for (int k1 = 0; k1 < filas; k1++) {
                 for (int k2 = 0; k2 < columnas; k2++) {
-                    tablero[k1][k2] = new CustomJPanel(k1, k2, 0, "src/images/celda.png", nivel.getNumeroBombas(),
+                    tablero[k1][k2] = new CustomJPanel(k1, k2, 0, "src/images/cel da.png", nivel.getNumeroBombas(),
                             nivel.getNumeroBanderas());
 
                 }
