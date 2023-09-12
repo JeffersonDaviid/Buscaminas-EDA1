@@ -84,15 +84,7 @@ public class Tablero extends JFrame {
         segundos = 0;
         minutos = 0;
         horas = 0;
-        panel_1.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (!partidaIniciada) {
-                    comenzarContador();
-                    partidaIniciada = true;
-                }
-            }
-        });
+        comenzarContador();
 
         addMouseListener(new MouseAdapter() {
             @Override
@@ -119,8 +111,9 @@ public class Tablero extends JFrame {
                 actualizarContador();
             }
         });
-        contador.start();
 
+        // Iniciar el temporizador
+        contador.start();
     }
 
     private void actualizarContador() {
@@ -157,6 +150,7 @@ public class Tablero extends JFrame {
                             if (aux.getTablero()[i][j].isPartidaGanada()) {
                                 JOptionPane.showMessageDialog(game, "USTED HA GANADO!", "PUNTUACION",
                                         JOptionPane.INFORMATION_MESSAGE);
+                                detenerContador();
                                 aux = aux.getNodoSiguiente();
                                 game.setVisible(false);
                                 break;
@@ -205,7 +199,7 @@ public class Tablero extends JFrame {
             calcularValorCasilleroTablero(nivel, filas, columnas);
 
             // INSERTAR LOS NIVELES EN UNA LISTA
-            niveles = nivel.insertarAlFinal(niveles, nivel);
+            niveles = niveles.insertarAlFinal(niveles, nivel);
         }
     }
 
@@ -308,6 +302,12 @@ public class Tablero extends JFrame {
         revelarVacio(tablero, fila, columna - 1);
         revelarVacio(tablero, fila - 1, columna);
 
+    }
+
+    private static void detenerContador() {
+        if (contador != null && contador.isRunning()) {
+            contador.stop();
+        }
     }
 
 }
