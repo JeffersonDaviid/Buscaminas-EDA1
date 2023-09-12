@@ -205,7 +205,7 @@ public class Tablero extends JFrame {
             calcularValorCasilleroTablero(nivel, filas, columnas);
 
             // INSERTAR LOS NIVELES EN UNA LISTA
-            niveles = niveles.insertarAlFinal(niveles, nivel);
+            niveles = NodoNiveles.insertarAlFinal(niveles, nivel);
         }
     }
 
