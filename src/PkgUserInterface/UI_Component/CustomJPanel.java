@@ -121,10 +121,10 @@ public class CustomJPanel extends JPanel {
 
                 }
 
-                // System.out.println("numero de banderas restantes: " +
-                // numBanderasRestantes[0]);
-                // System.out.println("numero de bombas restantes: " + numBombasRestantes[0]);
-                // System.out.println();
+                System.out.println("numero de banderas restantes: " +
+                        numBanderasRestantes[0]);
+                System.out.println("numero de bombas restantes: " + numBombasRestantes[0]);
+                System.out.println();
 
             }
         });
