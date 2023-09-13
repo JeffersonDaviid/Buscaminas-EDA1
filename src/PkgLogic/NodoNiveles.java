@@ -6,6 +6,8 @@ public class NodoNiveles {
 
     private int filas;
     private int columnas;
+    private int dificultad;
+
     private int[] numeroBombas = { 0 };
     private int[] numeroBanderas = { 0 };
 
@@ -83,4 +85,11 @@ public class NodoNiveles {
         return numeroBombas;
     }
 
+    public int getDificultad() {
+        return dificultad;
+    }
+
+    public void setDificultad(int dificultad) {
+        this.dificultad = dificultad;
+    }
 }
