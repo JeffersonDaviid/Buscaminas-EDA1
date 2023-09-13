@@ -2,7 +2,7 @@
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-import PkgUserInterface.UI_Component.CustomJPanel;
+import UI_Component.CustomJPanel;
 
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
@@ -18,9 +18,10 @@ import java.awt.Color;
 public class Puntuacion extends JFrame {
 
     private String pathFondo = "src/images/fondoGanadores.jpg";
-    private String pathPrimerLugar = "src/images/primerLugar.png";
 
     public Puntuacion(PilaJugadores jugadores) {
+        setIconImage(new javax.swing.ImageIcon("src/images/bandera1.png").getImage());
+        setUndecorated(true);
         setTitle("BUSCAMINAS - PUNTUACION");
         setSize(new Dimension(900, 600));
         setResizable(false);
@@ -54,47 +55,48 @@ public class Puntuacion extends JFrame {
         fondo.add(gradas);
         gradas.setLayout(null);
 
-        CustomJPanel panel = new CustomJPanel(pathPrimerLugar);
-        panel.setBounds(68, 0, 29, 34);
-        gradas.add(panel);
-
         JLabel lblJugador = new JLabel("jugador");
         lblJugador.setForeground(Color.RED);
-        lblJugador.setFont(new Font("Droid Sans", Font.BOLD, 15));
-        lblJugador.setBounds(118, 0, 114, 22);
+        lblJugador.setFont(new Font("Fira Code Light", Font.BOLD, 20));
+        lblJugador.setBounds(118, 0, 150, 35);
         gradas.add(lblJugador);
 
         JLabel lblPuntuacion = new JLabel("puntuacion");
         lblPuntuacion.setForeground(Color.GREEN);
-        lblPuntuacion.setFont(new Font("Fira Code Light", Font.BOLD, 15));
-        lblPuntuacion.setBounds(334, 0, 100, 22);
+        lblPuntuacion.setFont(new Font("Fira Code Light", Font.BOLD, 20));
+        lblPuntuacion.setBounds(334, 0, 150, 35);
         gradas.add(lblPuntuacion);
 
         for (int i = 0; i < jugadores.TOPE; i++) {
 
-            JLabel lblPlayer = new JLabel(jugadores.Pila[i].getNombre());
+            JLabel lblPlayer = new JLabel(jugadores.Pila[i].getNombre().toUpperCase());
             System.out.println(jugadores.Pila[i].getNombre());
             lblPlayer.setForeground(Color.WHITE);
             lblPlayer.setFont(new Font("Droid Sans", Font.ITALIC, 20));
-            lblPlayer.setBounds(118, (i * 26) + 26, 114, 25);
+            lblPlayer.setBounds(118, (i * 30) + 30, 150, 25);
             gradas.add(lblPlayer);
 
-            JLabel lblScore = new JLabel(jugadores.Pila[i].getPuntuacion() + "");
+            int hora = jugadores.Pila[i].getPuntuacion()[0];
+            int minuto = jugadores.Pila[i].getPuntuacion()[1];
+            int segundo = jugadores.Pila[i].getPuntuacion()[2];
+
+            JLabel lblScore = new JLabel(hora + ":" + minuto + ":" + segundo);
             lblScore.setForeground(Color.WHITE);
             lblScore.setFont(new Font("Fira Code Light", Font.ITALIC, 20));
-            lblScore.setBounds(334, (i * 26) + 26, 100, 25);
+            lblScore.setBounds(334, (i * 30) + 30, 150, 25);
             gradas.add(lblScore);
         }
 
         // boton para salir de la aplicacion
         JButton btnSalir = new JButton("Salir");
+        btnSalir.setFont(new Font("Fira Code Light", Font.BOLD, 20));
         btnSalir.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                System.exit(0); // Cierra la aplicación
+                setVisible(false);
             }
         });
-        btnSalir.setBounds(235, 196, 124, 27);
+        btnSalir.setBounds(378, 500, 124, 27);
         fondo.add(btnSalir);
 
     }

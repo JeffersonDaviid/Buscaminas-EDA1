@@ -14,6 +14,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
+import PkgLogic.NodoNiveles;
+
 public class CustomJPanel extends JPanel {
 
     // informacion de la celda
@@ -23,9 +25,6 @@ public class CustomJPanel extends JPanel {
     private int columna;
     private boolean esBandera = false;
     private boolean estaRevelado = false;
-
-    private boolean finPartida = false;
-    private boolean partidaGanada = false;
 
     private String pathCelda = "src/images/celda.png";
     private String pathCeldaDescubierta = "src/images/celdaDescubierta.png";
@@ -55,7 +54,7 @@ public class CustomJPanel extends JPanel {
      * @param imagePath
      */
     public CustomJPanel(int fila, int columna, int valor, String imagePath, int[] numBanderasRestantes,
-            int[] numBombasRestantes) {
+            int[] numBombasRestantes, NodoNiveles nivel) {
         this.fila = fila;
         this.columna = columna;
         this.valorCelda = valor;
@@ -82,8 +81,8 @@ public class CustomJPanel extends JPanel {
                     if (esBandera == false && estaRevelado == false) {
                         if (valorCelda == -1) {
                             cambiarFondo(pathBomba);
-                            setFinPartida(true);
-                            setPartidaGanada(false);
+                            nivel.setFinPartida(true);
+                            nivel.setPartidaGanada(false);
                         } else {
 
                             // solo se muestra etiqueta de casillero != 0
@@ -115,8 +114,8 @@ public class CustomJPanel extends JPanel {
                     }
 
                     if (numBombasRestantes[0] == 0 && numBanderasRestantes[0] == 0) {
-                        setFinPartida(true);
-                        setPartidaGanada(true);
+                        nivel.setFinPartida(true);
+                        nivel.setPartidaGanada(true);
                     }
 
                 }
@@ -176,22 +175,6 @@ public class CustomJPanel extends JPanel {
 
     public void setValorCelda(int valorCelda) {
         this.valorCelda = valorCelda;
-    }
-
-    public boolean isFinPartida() {
-        return finPartida;
-    }
-
-    public void setFinPartida(boolean finPartida) {
-        this.finPartida = finPartida;
-    }
-
-    public boolean isPartidaGanada() {
-        return partidaGanada;
-    }
-
-    public void setPartidaGanada(boolean partidaGanada) {
-        this.partidaGanada = partidaGanada;
     }
 
     public int getFila() {

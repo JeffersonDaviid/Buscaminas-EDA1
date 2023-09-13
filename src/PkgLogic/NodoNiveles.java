@@ -1,6 +1,6 @@
 package PkgLogic;
 
-import PkgUserInterface.UI_Component.CustomJPanel;
+import UI_Component.CustomJPanel;
 
 public class NodoNiveles {
 
@@ -10,6 +10,9 @@ public class NodoNiveles {
 
     private int[] numeroBombas = { 0 };
     private int[] numeroBanderas = { 0 };
+
+    private boolean finPartida = false;
+    private boolean partidaGanada = false;
 
     private CustomJPanel[][] tablero;
     private NodoNiveles nodoSiguiente;
@@ -91,5 +94,21 @@ public class NodoNiveles {
 
     public void setDificultad(int dificultad) {
         this.dificultad = dificultad;
+    }
+
+    public boolean isFinPartida() {
+        return finPartida;
+    }
+
+    public void setFinPartida(boolean finPartida) {
+        this.finPartida = finPartida;
+    }
+
+    public boolean isPartidaGanada() {
+        return partidaGanada;
+    }
+
+    public void setPartidaGanada(boolean partidaGanada) {
+        this.partidaGanada = partidaGanada;
     }
 }
