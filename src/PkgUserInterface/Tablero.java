@@ -3,27 +3,20 @@ import java.awt.GridLayout;
 import java.awt.event.*;
 import java.util.Random;
 import javax.swing.Timer;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
-import PkgUserInterface.UI_Component.CustomJPanel;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import PkgLogic.NodoNiveles;
 import PkgLogic.Player;
+import UI_Component.CustomJPanel;
 
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 
 public class Tablero extends JFrame {
-
-    // private boolean partidaFinalizada = false;
-    private boolean partidaIniciada = false;
-    // private static NodoNiveles niveles = null;
 
     // Items cabecera
     private static Timer contador;
@@ -38,6 +31,7 @@ public class Tablero extends JFrame {
     }
 
     public Tablero(NodoNiveles nivel, int filas, int columnas, Player player) {
+        setIconImage(new javax.swing.ImageIcon("src/images/bandera1.png").getImage());
         setTitle("PARTIDA DE " + player.getNombre().toUpperCase());
         setBounds(0, 0, filas * 30, columnas * 32);
         // setBounds(0, 0, 752, 434);
@@ -115,40 +109,6 @@ public class Tablero extends JFrame {
         lblContador.setText(tiempo);
     }
 
-    // public void iniciarJuego(Player player, NodoNiveles niveles, int filas, int
-    // columnas) {
-
-    // NodoNiveles aux = niveles;
-    // while (aux != null) {
-    // Tablero game = new Tablero(aux, filas, columnas, player);
-    // game.setVisible(true);
-
-    // while (game.isVisible()) {
-    // // Verificar si se ha perdido
-    // for (int i = 0; i < filas; i++) {
-    // for (int j = 0; j < columnas; j++) {
-    // if (aux.getTablero()[i][j].isFinPartida()) {
-    // if (aux.getTablero()[i][j].isPartidaGanada()) {
-    // JOptionPane.showMessageDialog(game, "USTED HA GANADO!", "PUNTUACION",
-    // JOptionPane.INFORMATION_MESSAGE);
-    // aux = aux.getNodoSiguiente();
-    // game.setVisible(false);
-    // break;
-    // } else {
-    // JOptionPane.showMessageDialog(game, "USTED HA PERDIDO :(", "PUNTUACION",
-    // JOptionPane.INFORMATION_MESSAGE);
-    // game.setVisible(false);
-    // return;
-    // }
-
-    // }
-    // }
-    // }
-    // }
-    // }
-
-    // }
-
     /**
      * Funcion para generar los 3 niveles dependiendo del grado de dificultad
      * 
@@ -166,7 +126,7 @@ public class Tablero extends JFrame {
             for (int k1 = 0; k1 < filas; k1++) {
                 for (int k2 = 0; k2 < columnas; k2++) {
                     tablero[k1][k2] = new CustomJPanel(k1, k2, 0, "src/images/celda.png", nivel.getNumeroBombas(),
-                            nivel.getNumeroBanderas());
+                            nivel.getNumeroBanderas(), nivel);
 
                 }
             }
@@ -226,7 +186,7 @@ public class Tablero extends JFrame {
                 // quitar las minas
                 if (nivel.getTablero()[i][j].getValorCelda() != -1) {
                     CustomJPanel celda = new CustomJPanel(i, j, contadorDeMinas, "src/images/celda.png",
-                            nivel.getNumeroBombas(), nivel.getNumeroBanderas());
+                            nivel.getNumeroBombas(), nivel.getNumeroBanderas(), nivel);
                     nivel.getTablero()[i][j] = celda;
 
                     int fila = i;
@@ -286,11 +246,49 @@ public class Tablero extends JFrame {
 
     }
 
+    public static int[] sumarTiempo(int hora, int minuto, int segundo, int horasASumar, int minutosASumar,
+            int segundosASumar) {
+        // Sumar segundos
+        int nuevoSegundo = segundo + segundosASumar;
+        int carrySegundos = nuevoSegundo / 60;
+        nuevoSegundo %= 60;
+
+        // Sumar minutos y tener en cuenta el carry de los segundos
+        int nuevoMinuto = minuto + minutosASumar + carrySegundos;
+        int carryMinutos = nuevoMinuto / 60;
+        nuevoMinuto %= 60;
+
+        // Sumar horas y tener en cuenta el carry de los minutos
+        int nuevaHora = hora + horasASumar + carryMinutos;
+        nuevaHora %= 24; // Asegurarse de que la hora esté en el rango de 0 a 23
+
+        System.out.println("Hora actual: " + hora + ":" + minuto + ":" + segundo);
+        System.out.println("Tiempo a sumar: " + horasASumar + " horas, " + minutosASumar + " minutos, " + segundosASumar
+                + " segundos");
+        System.out.println("Nueva hora: " + nuevaHora + ":" + nuevoMinuto + ":" + nuevoSegundo);
+
+        int[] tiempo = { nuevaHora, nuevoMinuto, nuevoSegundo };
+        return tiempo;
+
+    }
+
     public JLabel getLblBanderas() {
         return lblBanderas;
     }
 
     public void setLblBanderas(JLabel lblBanderas) {
         this.lblBanderas = lblBanderas;
+    }
+
+    public int getSegundos() {
+        return segundos;
+    }
+
+    public int getMinutos() {
+        return minutos;
+    }
+
+    public int getHoras() {
+        return horas;
     }
 }

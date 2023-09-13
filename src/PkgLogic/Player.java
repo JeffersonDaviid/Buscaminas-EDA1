@@ -2,11 +2,10 @@ package PkgLogic;
 
 public class Player {
     private String nombre;
-    private float puntuacion;
+    private int[] puntuacion = new int[3];
 
-    public Player(String nombre, float puntuacion) {
+    public Player(String nombre) {
         this.nombre = nombre;
-        this.puntuacion = puntuacion;
     }
 
     public String getNombre() {
@@ -17,11 +16,11 @@ public class Player {
         this.nombre = nombre;
     }
 
-    public float getPuntuacion() {
+    public int[] getPuntuacion() {
         return puntuacion;
     }
 
-    public void setPuntuacion(float puntuacion) {
+    public void setPuntuacion(int[] puntuacion) {
         this.puntuacion = puntuacion;
     }
 

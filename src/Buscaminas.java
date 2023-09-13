@@ -15,26 +15,27 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingWorker;
 
 import PkgLogic.NodoNiveles;
 import PkgLogic.PilaJugadores;
 import PkgLogic.Player;
-import PkgUserInterface.Tablero;
-import PkgUserInterface.UI_Component.CustomJPanel;
-import PkgUserInterface.Puntuacion;
+import UI_Component.CustomJPanel;
 
 public class Buscaminas extends JFrame {
 
     // JUGADORES
     private PilaJugadores jugadores = new PilaJugadores(50);
     private static NodoNiveles niveles = null;
+    int filas = 0, columnas = 0, bombas = 0;
 
     private String pathFondo = "src/images/fondoBuscaminas.jpg";
     private JTextField txtJugador;
     JComboBox comboBox;
 
     public Buscaminas() {
-        setTitle("BUSCAMINAS");
+        setIconImage(new javax.swing.ImageIcon("src/images/bandera1.png").getImage());
+        setTitle("BUSCAMINAS - EDA 1 - JSSF");
         setSize(new Dimension(400, 275));
         setResizable(false);
         setLocationRelativeTo(null);
@@ -55,8 +56,18 @@ public class Buscaminas extends JFrame {
         lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
         fondoInicio.add(lblTitulo);
 
+        JLabel lblTitulo1 = new JLabel("BUSCAMINAS");
+        lblTitulo1.setBounds(13, 13, 368, 50);
+        lblTitulo1.setForeground(Color.BLACK);
+        lblTitulo1.setFont(new Font("Super Mario 256", Font.BOLD, 41));
+        lblTitulo1.setHorizontalTextPosition(SwingConstants.CENTER);
+        lblTitulo1.setHorizontalAlignment(SwingConstants.CENTER);
+        fondoInicio.add(lblTitulo1);
+
         JLabel lblJugador = new JLabel("JUGADOR:");
-        lblJugador.setBounds(22, 74, 60, 17);
+        lblJugador.setForeground(Color.magenta);
+        lblJugador.setFont(new Font("Super Mario 256", Font.BOLD, 12));
+        lblJugador.setBounds(22, 74, 90, 17);
         fondoInicio.add(lblJugador);
 
         txtJugador = new JTextField();
@@ -64,8 +75,10 @@ public class Buscaminas extends JFrame {
         fondoInicio.add(txtJugador);
         txtJugador.setColumns(10);
 
-        JLabel lblDificultad = new JLabel("DIFICULTAD");
+        JLabel lblDificultad = new JLabel("DIFICULTAD:");
         lblDificultad.setBounds(22, 150, 104, 17);
+        lblDificultad.setForeground(Color.magenta);
+        lblDificultad.setFont(new Font("Super Mario 256", Font.BOLD, 12));
         fondoInicio.add(lblDificultad);
 
         Object[] opciones = { "Fácil", "Medio", "Difícil" };
@@ -77,13 +90,8 @@ public class Buscaminas extends JFrame {
         JButton btnIniciar = new JButton("Iniciar Juego");
         btnIniciar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                iniciarPartida();
-            }
-        });
-        btnIniciar.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                iniciarPartida();
+                // iniciarPartida();
+                startGame();
             }
         });
         btnIniciar.setBounds(235, 97, 124, 27);
@@ -91,11 +99,11 @@ public class Buscaminas extends JFrame {
 
         // Botón para ver tabla de puntuaciones
         JButton btnPuntuaciones = new JButton("Puntuaciones");
+        btnPuntuaciones.setForeground(Color.darkGray);
         btnPuntuaciones.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 verPuntuacion();
-                // this.setVisible(false);
             }
         });
         btnPuntuaciones.setBounds(235, 145, 124, 27);
@@ -114,9 +122,75 @@ public class Buscaminas extends JFrame {
 
     }
 
-    public void iniciarPartida() {
+    private void startGame() {
         this.setVisible(false);
-        Player jugador = new Player(txtJugador.getText(), 0);
+
+        Player jugador = new Player(txtJugador.getText());
+        int dificultad = comboBox.getSelectedIndex();
+
+        switch (dificultad) {
+            case 0:
+                filas = columnas = 10;
+                bombas = 10;
+                break;
+            case 1:
+                filas = columnas = 16;
+                bombas = 40;
+                break;
+            case 2:
+                filas = columnas = 22;
+                bombas = 99;
+                break;
+        }
+
+        niveles = Tablero.generarNiveles(bombas, filas, columnas);
+        jugadores.insertarPila(jugador);
+
+        SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                NodoNiveles nivel = niveles;
+
+                while (nivel != null) {
+                    Tablero game = new Tablero(nivel, filas, columnas, jugador);
+                    game.setVisible(true);
+
+                    while (game.isVisible()) {
+                        if (nivel.isFinPartida()) {
+                            if (nivel.isPartidaGanada()) {
+                                JOptionPane.showMessageDialog(game, "USTED HA GANADO!", "PUNTUACION",
+                                        JOptionPane.INFORMATION_MESSAGE);
+
+                                int[] puntos = game.sumarTiempo(jugador.getPuntuacion()[0], jugador.getPuntuacion()[1],
+                                        jugador.getPuntuacion()[2], game.getHoras(), game.getMinutos(),
+                                        game.getSegundos());
+                                jugador.setPuntuacion(puntos);
+                            } else {
+                                JOptionPane.showMessageDialog(game, "USTED HA PERDIDO :(", "PUNTUACION",
+                                        JOptionPane.INFORMATION_MESSAGE);
+                            }
+
+                            game.setVisible(false);
+
+                            if (!nivel.isPartidaGanada()) {
+                                setVisible(true);
+                                return null;
+                            }
+                            nivel = nivel.getNodoSiguiente();
+                        }
+                    }
+                }
+                setVisible(true);
+                return null;
+            }
+        };
+
+        worker.execute(); // Ejecuta el SwingWorker en un hilo secundario
+    }
+
+    public void iniciarJuego() {
+        this.setVisible(false);
+        Player jugador = new Player(txtJugador.getText());
         int dificultad = comboBox.getSelectedIndex();
         System.out.print(dificultad);
         int filas = 0, columnas = 0, bombas = 0;
@@ -135,59 +209,39 @@ public class Buscaminas extends JFrame {
         }
 
         NodoNiveles niveles = Tablero.generarNiveles(bombas, filas, columnas);
-        // Tablero tabla = new Tablero();
-        // tabla.iniciarJuego(jugador, niveles, filas, columnas);
-
         jugadores.insertarPila(jugador);
 
-        for (int i = 0; i < filas; i++) {
-            for (int j = 0; j < columnas; j++) {
-                System.out.print(niveles.getTablero()[i][j].getValorCelda() + " ");
-            }
-            System.out.println();
-        }
-
-        NodoNiveles aux = niveles;
-        while (aux != null) {
-            Tablero game = new Tablero(aux, filas, columnas, jugador);
+        NodoNiveles nivel = niveles;
+        while (nivel != null) {
+            Tablero game = new Tablero(nivel, filas, columnas, jugador);
             game.setVisible(true);
 
             while (game.isVisible()) {
-                aux = aux.getNodoSiguiente();
 
-                // // Verificar si se ha perdido
-                // for (int i = 0; i < filas; i++) {
-                // for (int j = 0; j < columnas; j++) {
-                // if (aux.getTablero()[i][j].isFinPartida()) {
-                // if (aux.getTablero()[i][j].isPartidaGanada()) {
-                // JOptionPane.showMessageDialog(game, "USTED HA GANADO!", "PUNTUACION",
-                // JOptionPane.INFORMATION_MESSAGE);
-                // aux = aux.getNodoSiguiente();
-                // game.setVisible(false);
-                // this.setVisible(true);
-                // break;
-                // } else {
-                // JOptionPane.showMessageDialog(game, "USTED HA PERDIDO :(", "PUNTUACION",
-                // JOptionPane.INFORMATION_MESSAGE);
-                // game.setVisible(false);
-                // this.setVisible(true);
-                // return;
-                // }
-                // }
-                // }
-                // }
+                if (nivel.isFinPartida()) {
+                    if (nivel.isPartidaGanada()) {
+                        JOptionPane.showMessageDialog(game, "USTED HA GANADO!", "PUNTUACION",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        nivel = nivel.getNodoSiguiente();
+                    } else {
+                        JOptionPane.showMessageDialog(game, "USTED HA PERDIDO :(", "PUNTUACION",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    }
 
+                    game.setVisible(false);
+                    this.setVisible(true);
+
+                    if (!nivel.isPartidaGanada()) {
+                        return;
+                    }
+                }
             }
+
         }
+
     }
 
     public void verPuntuacion() {
-        this.setVisible(false);
-        for (int i = 1; i < 10; i++) {
-            Player p = new Player("pepe", i);
-            jugadores.insertarPila(p);
-        }
-
         Puntuacion p = new Puntuacion(jugadores);
         p.setVisible(true);
 
