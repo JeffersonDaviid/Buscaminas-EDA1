@@ -1,10 +1,12 @@
-package PkgUserInterface;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import PkgUserInterface.UI_Component.CustomJPanel;
 
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.Dimension;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -83,7 +85,17 @@ public class Puntuacion extends JFrame {
             lblScore.setBounds(334, (i * 26) + 26, 100, 25);
             gradas.add(lblScore);
         }
-        System.out.println("hola");
+
+        // boton para salir de la aplicacion
+        JButton btnSalir = new JButton("Salir");
+        btnSalir.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                System.exit(0); // Cierra la aplicación
+            }
+        });
+        btnSalir.setBounds(235, 196, 124, 27);
+        fondo.add(btnSalir);
 
     }
 

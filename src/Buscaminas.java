@@ -94,8 +94,8 @@ public class Buscaminas extends JFrame {
         btnPuntuaciones.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                Puntuacion p = new Puntuacion(jugadores);
-                p.setVisible(true);
+                verPuntuacion();
+                // this.setVisible(false);
             }
         });
         btnPuntuaciones.setBounds(235, 145, 124, 27);
@@ -132,15 +132,11 @@ public class Buscaminas extends JFrame {
             case 2:
                 filas = columnas = 22;
                 bombas = 99;
-                break;
         }
+
         NodoNiveles niveles = Tablero.generarNiveles(bombas, filas, columnas);
         // Tablero tabla = new Tablero();
         // tabla.iniciarJuego(jugador, niveles, filas, columnas);
-        for (int i = 0; i < 10; i++) {
-            Player p = new Player("pepe", i);
-            jugadores.insertarPila(p);
-        }
 
         jugadores.insertarPila(jugador);
 
@@ -168,7 +164,7 @@ public class Buscaminas extends JFrame {
                 // JOptionPane.INFORMATION_MESSAGE);
                 // aux = aux.getNodoSiguiente();
                 // game.setVisible(false);
-                // // this.setVisible(true);
+                // this.setVisible(true);
                 // break;
                 // } else {
                 // JOptionPane.showMessageDialog(game, "USTED HA PERDIDO :(", "PUNTUACION",
@@ -183,6 +179,17 @@ public class Buscaminas extends JFrame {
 
             }
         }
+    }
+
+    public void verPuntuacion() {
+        this.setVisible(false);
+        for (int i = 1; i < 10; i++) {
+            Player p = new Player("pepe", i);
+            jugadores.insertarPila(p);
+        }
+
+        Puntuacion p = new Puntuacion(jugadores);
+        p.setVisible(true);
 
     }
 

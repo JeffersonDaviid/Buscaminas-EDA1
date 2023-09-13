@@ -1,4 +1,4 @@
-package PkgUserInterface.UI_Component;
+package UI_Component;
 
 import java.awt.BorderLayout;
 import java.awt.Font;

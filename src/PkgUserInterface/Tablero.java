@@ -1,10 +1,10 @@
-package PkgUserInterface;
 
 import java.awt.GridLayout;
 import java.awt.event.*;
 import java.util.Random;
 import javax.swing.Timer;
-
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
@@ -110,8 +110,7 @@ public class Tablero extends JFrame {
         contador.start();
     }
 
-
-     private void actualizarContador() {
+    private void actualizarContador() {
         String tiempo = String.format("%02d:%02d:%02d", horas, minutos, segundos);
         lblContador.setText(tiempo);
     }
