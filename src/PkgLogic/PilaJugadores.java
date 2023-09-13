@@ -5,11 +5,11 @@ import javax.swing.JOptionPane;
 public class PilaJugadores {
 
     // Creamos el arreglo Pila
-    Player[] Pila;
+   public Player[] Pila;
     // Creamos la variable auxiliar TOPE
-    int TOPE;
+    public int TOPE;
     // Creamos la variable MAX
-    int MAX;
+    public int MAX;
 
     // Constructor
     public PilaJugadores(int MAX) {
@@ -45,7 +45,7 @@ public class PilaJugadores {
         } else {
             this.TOPE++;
             this.Pila[this.TOPE] = player;
-            JOptionPane.showMessageDialog(null, "EL DATO " + player.getNombre() + " SE INSERTO EN LA PILA");
+            JOptionPane.showMessageDialog(null, "EL DATO " + player.getNombre().toUpperCase() + " SE INSERTO EN LA PILA");
         }
     }
 

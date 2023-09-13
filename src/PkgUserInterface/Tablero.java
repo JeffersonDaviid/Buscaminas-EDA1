@@ -38,7 +38,7 @@ public class Tablero extends JFrame {
     }
 
     public Tablero(NodoNiveles nivel, int filas, int columnas, Player player) {
-        setTitle("BUSCAMINAS - BIENVENIDO " + player.getNombre().toUpperCase());
+        setTitle("PARTIDA DE " + player.getNombre().toUpperCase());
         setBounds(0, 0, filas * 30, columnas * 32);
         // setBounds(0, 0, 752, 434);
         setResizable(false);
@@ -79,16 +79,7 @@ public class Tablero extends JFrame {
         segundos = 0;
         minutos = 0;
         horas = 0;
-        panel_1.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (!partidaIniciada) {
-                    comenzarContador();
-                    partidaIniciada = true;
-                }
-            }
-        });
-
+        comenzarContador();
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -114,11 +105,13 @@ public class Tablero extends JFrame {
                 actualizarContador();
             }
         });
-        contador.start();
 
+        // Iniciar el temporizador
+        contador.start();
     }
 
-    private void actualizarContador() {
+
+     private void actualizarContador() {
         String tiempo = String.format("%02d:%02d:%02d", horas, minutos, segundos);
         lblContador.setText(tiempo);
     }

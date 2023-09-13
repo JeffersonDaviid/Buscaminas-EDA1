@@ -21,15 +21,17 @@ import PkgLogic.PilaJugadores;
 import PkgLogic.Player;
 import PkgUserInterface.Tablero;
 import PkgUserInterface.UI_Component.CustomJPanel;
+import PkgUserInterface.Puntuacion;
 
 public class Buscaminas extends JFrame {
 
     // JUGADORES
-    private PilaJugadores jugadores = new PilaJugadores(10);
+    private PilaJugadores jugadores = new PilaJugadores(50);
     private static NodoNiveles niveles = null;
 
     private String pathFondo = "src/images/fondoBuscaminas.jpg";
     private JTextField txtJugador;
+    JComboBox comboBox;
 
     public Buscaminas() {
         setTitle("BUSCAMINAS");
@@ -67,7 +69,7 @@ public class Buscaminas extends JFrame {
         fondoInicio.add(lblDificultad);
 
         Object[] opciones = { "Fácil", "Medio", "Difícil" };
-        JComboBox comboBox = new JComboBox(opciones);
+        comboBox = new JComboBox(opciones);
         comboBox.setBounds(32, 179, 114, 26);
         fondoInicio.add(comboBox);
 
@@ -81,6 +83,7 @@ public class Buscaminas extends JFrame {
         btnIniciar.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                iniciarPartida();
             }
         });
         btnIniciar.setBounds(235, 97, 124, 27);
@@ -91,6 +94,8 @@ public class Buscaminas extends JFrame {
         btnPuntuaciones.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                Puntuacion p = new Puntuacion(jugadores);
+                p.setVisible(true);
             }
         });
         btnPuntuaciones.setBounds(235, 145, 124, 27);
@@ -112,7 +117,8 @@ public class Buscaminas extends JFrame {
     public void iniciarPartida() {
         this.setVisible(false);
         Player jugador = new Player(txtJugador.getText(), 0);
-        int dificultad = 0;
+        int dificultad = comboBox.getSelectedIndex();
+        System.out.print(dificultad);
         int filas = 0, columnas = 0, bombas = 0;
         switch (dificultad) {
             case 0:
@@ -120,18 +126,30 @@ public class Buscaminas extends JFrame {
                 bombas = 10;
                 break;
             case 1:
-                filas = columnas = 18;
+                filas = columnas = 16;
                 bombas = 40;
                 break;
             case 2:
-                filas = columnas = 24;
+                filas = columnas = 22;
                 bombas = 99;
                 break;
         }
         NodoNiveles niveles = Tablero.generarNiveles(bombas, filas, columnas);
         // Tablero tabla = new Tablero();
         // tabla.iniciarJuego(jugador, niveles, filas, columnas);
+        for (int i = 0; i < 10; i++) {
+            Player p = new Player("pepe", i);
+            jugadores.insertarPila(p);
+        }
+
         jugadores.insertarPila(jugador);
+
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < columnas; j++) {
+                System.out.print(niveles.getTablero()[i][j].getValorCelda() + " ");
+            }
+            System.out.println();
+        }
 
         NodoNiveles aux = niveles;
         while (aux != null) {
@@ -139,28 +157,30 @@ public class Buscaminas extends JFrame {
             game.setVisible(true);
 
             while (game.isVisible()) {
-                // Verificar si se ha perdido
-                for (int i = 0; i < filas; i++) {
-                    for (int j = 0; j < columnas; j++) {
-                        if (aux.getTablero()[i][j].isFinPartida()) {
-                            if (aux.getTablero()[i][j].isPartidaGanada()) {
-                                JOptionPane.showMessageDialog(game, "USTED HA GANADO!", "PUNTUACION",
-                                        JOptionPane.INFORMATION_MESSAGE);
-                                aux = aux.getNodoSiguiente();
-                                game.setVisible(false);
-                                this.setVisible(true);
-                                break;
-                            } else {
-                                JOptionPane.showMessageDialog(game, "USTED HA PERDIDO :(", "PUNTUACION",
-                                        JOptionPane.INFORMATION_MESSAGE);
-                                game.setVisible(false);
-                                this.setVisible(true);
-                                return;
-                            }
+                aux = aux.getNodoSiguiente();
 
-                        }
-                    }
-                }
+                // // Verificar si se ha perdido
+                // for (int i = 0; i < filas; i++) {
+                // for (int j = 0; j < columnas; j++) {
+                // if (aux.getTablero()[i][j].isFinPartida()) {
+                // if (aux.getTablero()[i][j].isPartidaGanada()) {
+                // JOptionPane.showMessageDialog(game, "USTED HA GANADO!", "PUNTUACION",
+                // JOptionPane.INFORMATION_MESSAGE);
+                // aux = aux.getNodoSiguiente();
+                // game.setVisible(false);
+                // // this.setVisible(true);
+                // break;
+                // } else {
+                // JOptionPane.showMessageDialog(game, "USTED HA PERDIDO :(", "PUNTUACION",
+                // JOptionPane.INFORMATION_MESSAGE);
+                // game.setVisible(false);
+                // this.setVisible(true);
+                // return;
+                // }
+                // }
+                // }
+                // }
+
             }
         }
 
