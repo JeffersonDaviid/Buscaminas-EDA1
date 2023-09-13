@@ -13,8 +13,8 @@ import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import PkgLogic.NodoJugadores;
 import PkgLogic.NodoNiveles;
+import PkgLogic.Player;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -23,27 +23,22 @@ public class Tablero extends JFrame {
 
     // private boolean partidaFinalizada = false;
     private boolean partidaIniciada = false;
-    private static NodoNiveles niveles = null;
+    // private static NodoNiveles niveles = null;
 
     // Items cabecera
     private static Timer contador;
     private JLabel lblContador;
     private JLabel lblBanderas;
 
-    public JLabel getLblBanderas() {
-        return lblBanderas;
-    }
-
-    public void setLblBanderas(JLabel lblBanderas) {
-        this.lblBanderas = lblBanderas;
-    }
-
     private int segundos;
     private int minutos;
     private int horas;
 
-    public Tablero(NodoNiveles nivel, int filas, int columnas, NodoJugadores player) {
-        setTitle("BUSCAMINAS - BIENVENIDO " + player.getNombre().toUpperCase());
+    public Tablero() {
+    }
+
+    public Tablero(NodoNiveles nivel, int filas, int columnas, Player player) {
+        setTitle("PARTIDA DE " + player.getNombre().toUpperCase());
         setBounds(0, 0, filas * 30, columnas * 32);
         // setBounds(0, 0, 752, 434);
         setResizable(false);
@@ -85,7 +80,6 @@ public class Tablero extends JFrame {
         minutos = 0;
         horas = 0;
         comenzarContador();
-
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -113,6 +107,8 @@ public class Tablero extends JFrame {
         });
 
         // Iniciar el temporizador
+
+        // Iniciar el temporizador
         contador.start();
     }
 
@@ -121,53 +117,39 @@ public class Tablero extends JFrame {
         lblContador.setText(tiempo);
     }
 
-    public static void main(String[] args) {
-        int dificultad = 10;
-        int filas = 0, columnas = 0;
+    // public void iniciarJuego(Player player, NodoNiveles niveles, int filas, int
+    // columnas) {
 
-        // 10 facil con 10B , 18 medio con 40B, 24 con 99B dificil
-        if (dificultad <= 10) {
-            filas = columnas = 10;
-        } else if (10 < dificultad && dificultad < 70) {
-            filas = columnas = 18;
-        } else if (dificultad >= 70) {
-            filas = columnas = 24;
-        }
+    // NodoNiveles aux = niveles;
+    // while (aux != null) {
+    // Tablero game = new Tablero(aux, filas, columnas, player);
+    // game.setVisible(true);
 
-        generarNiveles(dificultad, filas, columnas);
-        NodoNiveles aux = niveles;
-        NodoJugadores p = new NodoJugadores("Pepe", 0);
+    // while (game.isVisible()) {
+    // // Verificar si se ha perdido
+    // for (int i = 0; i < filas; i++) {
+    // for (int j = 0; j < columnas; j++) {
+    // if (aux.getTablero()[i][j].isFinPartida()) {
+    // if (aux.getTablero()[i][j].isPartidaGanada()) {
+    // JOptionPane.showMessageDialog(game, "USTED HA GANADO!", "PUNTUACION",
+    // JOptionPane.INFORMATION_MESSAGE);
+    // aux = aux.getNodoSiguiente();
+    // game.setVisible(false);
+    // break;
+    // } else {
+    // JOptionPane.showMessageDialog(game, "USTED HA PERDIDO :(", "PUNTUACION",
+    // JOptionPane.INFORMATION_MESSAGE);
+    // game.setVisible(false);
+    // return;
+    // }
 
-        while (aux != null) {
-            Tablero game = new Tablero(aux, filas, columnas, p);
-            game.setVisible(true);
+    // }
+    // }
+    // }
+    // }
+    // }
 
-            while (game.isVisible()) {
-                // Verificar si se ha perdido
-                for (int i = 0; i < filas; i++) {
-                    for (int j = 0; j < columnas; j++) {
-                        if (aux.getTablero()[i][j].isFinPartida()) {
-                            if (aux.getTablero()[i][j].isPartidaGanada()) {
-                                JOptionPane.showMessageDialog(game, "USTED HA GANADO!", "PUNTUACION",
-                                        JOptionPane.INFORMATION_MESSAGE);
-                                detenerContador();
-                                aux = aux.getNodoSiguiente();
-                                game.setVisible(false);
-                                break;
-                            } else {
-                                JOptionPane.showMessageDialog(game, "USTED HA PERDIDO :(", "PUNTUACION",
-                                        JOptionPane.INFORMATION_MESSAGE);
-                                game.setVisible(false);
-                                return;
-                            }
-
-                        }
-                    }
-                }
-            }
-        }
-
-    }
+    // }
 
     /**
      * Funcion para generar los 3 niveles dependiendo del grado de dificultad
@@ -176,8 +158,8 @@ public class Tablero extends JFrame {
      * @param filas
      * @param columnas
      */
-    public static void generarNiveles(int dificultad, int filas, int columnas) {
-
+    public static NodoNiveles generarNiveles(int dificultad, int filas, int columnas) {
+        NodoNiveles niveles = null;
         // GENERAR LAS BOMBAS
         for (int i = 0; i < 3; i++) {
             CustomJPanel[][] tablero = new CustomJPanel[filas][columnas];
@@ -185,7 +167,7 @@ public class Tablero extends JFrame {
 
             for (int k1 = 0; k1 < filas; k1++) {
                 for (int k2 = 0; k2 < columnas; k2++) {
-                    tablero[k1][k2] = new CustomJPanel(k1, k2, 0, "src/images/cel da.png", nivel.getNumeroBombas(),
+                    tablero[k1][k2] = new CustomJPanel(k1, k2, 0, "src/images/celda.png", nivel.getNumeroBombas(),
                             nivel.getNumeroBanderas());
 
                 }
@@ -201,6 +183,8 @@ public class Tablero extends JFrame {
             // INSERTAR LOS NIVELES EN UNA LISTA
             niveles = niveles.insertarAlFinal(niveles, nivel);
         }
+
+        return niveles;
     }
 
     public static int generateRandomNumber(int min, int max) {
@@ -304,10 +288,11 @@ public class Tablero extends JFrame {
 
     }
 
-    private static void detenerContador() {
-        if (contador != null && contador.isRunning()) {
-            contador.stop();
-        }
+    public JLabel getLblBanderas() {
+        return lblBanderas;
     }
 
+    public void setLblBanderas(JLabel lblBanderas) {
+        this.lblBanderas = lblBanderas;
+    }
 }
